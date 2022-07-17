@@ -9,11 +9,16 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "a2workspace/laravel-jwt": "*",
         "a2workspace/laravel-social-entry": "*",
+        "a2workspace/laravel-stubs": "*",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
         "laravel/tinker": "^2.5"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.9.1"
     },
     "autoload": {
         "psr-4": {
@@ -50,6 +55,14 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": {
+        "a2workspace/laravel-jwt": {
+            "type": "vcs",
+            "url": "https://github.com/A2Workspace/laravel-jwt.git"
+        },
+        "a2workspace/laravel-stubs": {
+            "type": "vcs",
+            "url": "https://github.com/A2Workspace/laravel-stubs.git"
+        },
         "a2workspace/laravel-social-entry": {
             "type": "vcs",
             "url": "https://github.com/A2Workspace/laravel-social-entry.git"
