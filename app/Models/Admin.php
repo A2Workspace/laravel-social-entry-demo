@@ -8,7 +8,7 @@ use A2Workspace\LaravelJwt\HasApiTokens;
 use A2Workspace\LaravelJwt\Contracts\JWTSubject;
 use A2Workspace\SocialEntry\HasSocialIdentifiers;
 
-class User extends Authenticatable implements JWTSubject
+class Admin extends Authenticatable implements JWTSubject
 {
     use HasFactory, HasApiTokens, HasSocialIdentifiers;
 
@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var string
      */
-    protected $table = 'users';
+    protected $table = 'admins';
 
     /**
      * The attributes that are mass assignable.
