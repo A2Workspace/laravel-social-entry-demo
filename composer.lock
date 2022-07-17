@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "411bed983d7301a24f63892e5d341623",
+    "content-hash": "77988431c1f30a32f3f5a3bf5ca7e141",
     "packages": [
         {
             "name": "a2workspace/laravel-social-entry",
@@ -72,6 +72,60 @@
                 "issues": "https://github.com/A2Workspace/laravel-social-entry/issues"
             },
             "time": "2022-07-17T01:36:36+00:00"
+        },
+        {
+            "name": "a2workspace/laravel-stubs",
+            "version": "0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/A2Workspace/laravel-stubs.git",
+                "reference": "c87e1f23c6f9af720e1be15134683be2a7715396"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/A2Workspace/laravel-stubs/zipball/c87e1f23c6f9af720e1be15134683be2a7715396",
+                "reference": "c87e1f23c6f9af720e1be15134683be2a7715396",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "6.x"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "A2Workspace\\Stubs\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "A2Workspace\\Stubs\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shishamou",
+                    "email": "shishatw225@gmail.com"
+                }
+            ],
+            "description": "一個基於專案的類別模板注入器。",
+            "support": {
+                "source": "https://github.com/A2Workspace/laravel-stubs/tree/0.2.1",
+                "issues": "https://github.com/A2Workspace/laravel-stubs/issues"
+            },
+            "time": "2022-07-17T18:35:59+00:00"
         },
         {
             "name": "asm89/stack-cors",
