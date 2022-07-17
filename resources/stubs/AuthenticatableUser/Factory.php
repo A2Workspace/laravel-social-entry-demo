@@ -22,7 +22,7 @@ class DummyFactory extends Factory
     public function definition()
     {
         return [
-            'username' => $this->faker->numerify('dummy00####'),
+            'username' => $this->faker->numerify('dummy###'),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'display_name' => $this->faker->name(),
             'is_enabled' => true,
