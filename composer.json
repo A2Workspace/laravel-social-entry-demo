@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "a2workspace/laravel-social-entry": "*",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
@@ -47,5 +48,11 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "a2workspace/laravel-social-entry": {
+            "type": "vcs",
+            "url": "https://github.com/A2Workspace/laravel-social-entry.git"
+        }
+    }
 }
