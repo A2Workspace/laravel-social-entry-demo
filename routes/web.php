@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () use ($router) {
+Route::get('/version', function () {
     return sprintf('Laravel Framework (%s)', app()->version());
+});
+
+Route::get('/', function () {
+    return view('app');
 });
