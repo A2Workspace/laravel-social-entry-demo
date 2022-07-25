@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use A2Workspace\LaravelJwt\LaravelJwt;
+use A2Workspace\SocialEntry\SocialEntry;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        SocialEntry::routes();
+
+        LaravelJwt::routes([
+            'prefix' => '/auth',
+            'namespace' => '\App\Http\Controllers\Client',
+            'as' => 'auth.',
+        ]);
+
+        LaravelJwt::routes([
+            'prefix' => '/admin/auth',
+            'namespace' => '\App\Http\Controllers\Admin',
+            'as' => 'admin.auth.',
+        ]);
     }
 }

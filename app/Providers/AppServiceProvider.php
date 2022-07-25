@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use A2Workspace\SocialEntry\SocialEntry;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,8 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (!$this->app->routesAreCached()) {
-            SocialEntry::routes();
-        }
+        //
     }
 }
