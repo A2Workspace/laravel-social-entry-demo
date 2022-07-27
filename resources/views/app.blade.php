@@ -16,7 +16,7 @@
             }
         </style>
 
-         <link href="{{ mix('assets/app.css') }}" rel="stylesheet" />
+         {{-- <link href="{{ mix('assets/app.css') }}" rel="stylesheet" /> --}}
          <script defer src="{{ mix('assets/app.js') }}"></script>
     </head>
 

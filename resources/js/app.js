@@ -1,30 +1,34 @@
 import Vue from 'vue';
 
+function importDefault(esModel) {
+  return esModel.default || esModel;
+}
+
 /* =============================================================================
  * = Axios
  * =============================================================================
  **/
 
-const axios = require("axios");
+const axios = require('axios');
 
-axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /* =============================================================================
  * = Including Components
  * =============================================================================
  **/
 
-Vue.component("Login", require("./components/Login").default);
-Vue.component("Profile", require("./components/Profile").default);
+Vue.component('Login', importDefault(require('./components/Login')));
+Vue.component('Profile', importDefault(require('./components/Profile')));
 
 /* =============================================================================
  * = Create The Vue Application
  * =============================================================================
  **/
 
-const Root = require("./components/Root");
+const Root = importDefault(require('./Root'));
 
 window.app = new Vue({
-  el: "#app",
-  render: (h) => h(Root.default),
+  el: '#app',
+  render: (h) => h(Root),
 });
