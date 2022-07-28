@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import SignInBox from '../components/login/SignInBox.vue';
+import SignInBox from '../components/SignInBox';
 
 export default {
   components: { SignInBox },

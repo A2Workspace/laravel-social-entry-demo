@@ -9,7 +9,7 @@ export default {
 
   provide() {
     return {
-      login: this.login,
+      loginWith: this.loginWith,
       loggout: this.loggout,
       isLoggedIn: () => this.isLoggedIn,
       user: () => this.user,
@@ -17,14 +17,36 @@ export default {
   },
 
   methods: {
-    login(data) {
-      return axios
-        .request({
+    loginWith(provider, data) {
+      let options = { data };
+
+      if (provider === 'admin') {
+        options = {
+          ...options,
           method: 'post',
-          url: '/api/auth/login',
-          data,
-        })
-        .then((res) => {});
+          url: '/admin/auth/login',
+        };
+      } else {
+        options = {
+          ...options,
+          method: 'post',
+          url: '/auth/login',
+        };
+      }
+
+      return axios.request(options).then((response) => {
+        let payload = response.data;
+
+        if (isAccessibility(payload.data)) {
+          payload = payload.data;
+        }
+
+        if (isAccessibility(payload.user)) {
+          this.user = payload.user;
+        }
+
+        return response;
+      });
     },
 
     loggout() {
@@ -41,3 +63,7 @@ export default {
     },
   },
 };
+
+function isAccessibility(value) {
+  return typeof value === 'object' && value !== null;
+}

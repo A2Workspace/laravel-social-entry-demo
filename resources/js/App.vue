@@ -7,11 +7,12 @@
 
 <script>
 import Auth from './mixins/Auth';
+import SocialEntry from './mixins/SocialEntry';
 import LoginPage from './pages/login';
 import ProfilePage from './pages/profile';
 
 export default {
-  mixins: [ Auth ],
+  mixins: [Auth, SocialEntry],
   components: { LoginPage, ProfilePage },
 };
 </script>
@@ -23,6 +24,7 @@ body {
   margin: 0;
   background-color: #eceef3;
 }
+
 .wrapper {
   position: relative;
 }
