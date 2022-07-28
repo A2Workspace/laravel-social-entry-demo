@@ -1,5 +1,11 @@
 import Vue from 'vue';
 
+function createApp(rootComponent) {
+  return new Vue({
+    render: (h) => h(rootComponent),
+  });
+}
+
 function importDefault(esModel) {
   return esModel.default || esModel;
 }
@@ -18,9 +24,6 @@ axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * =============================================================================
  **/
 
-const App = importDefault(require('./App'));
+import App from './App';
 
-window.app = new Vue({
-  el: '#app',
-  render: (h) => h(App),
-});
+createApp(App).$mount('#app');
