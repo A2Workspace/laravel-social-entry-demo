@@ -14,21 +14,13 @@ const axios = require('axios');
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /* =============================================================================
- * = Including Components
+ * = Create Vue Application
  * =============================================================================
  **/
 
-Vue.component('Login', importDefault(require('./components/Login')));
-Vue.component('Profile', importDefault(require('./components/Profile')));
-
-/* =============================================================================
- * = Create The Vue Application
- * =============================================================================
- **/
-
-const Root = importDefault(require('./Root'));
+const App = importDefault(require('./App'));
 
 window.app = new Vue({
   el: '#app',
-  render: (h) => h(Root),
+  render: (h) => h(App),
 });

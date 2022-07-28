@@ -11,7 +11,7 @@ const mix = require("laravel-mix");
  |
 **/
 
-mix.js("resources/js/app.js", "public/assets").vue({ version: 2 });
+mix.js("resources/js/main.js", "public/assets/app.js").vue({ version: 2 });
 
 mix.options({
   hmrOptions: {
