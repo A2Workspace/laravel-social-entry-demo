@@ -4,6 +4,7 @@ export default {
   data() {
     return {
       user: null,
+      token: null,
     };
   },
 
@@ -17,49 +18,71 @@ export default {
   },
 
   methods: {
-    loginWith(provider, data) {
-      let options = { data };
+    async loginWith(provider, data) {
+      let options = {};
 
       if (provider === 'admin') {
         options = {
-          ...options,
-          method: 'post',
-          url: '/admin/auth/login',
+          endpoint: '/admin/auth',
+          // ...
         };
       } else {
         options = {
-          ...options,
-          method: 'post',
-          url: '/auth/login',
+          endpoint: '/auth',
+          // ...
         };
       }
 
-      return axios.request(options).then((response) => {
-        let payload = response.data;
-
-        if (isAccessibility(payload.data)) {
-          payload = payload.data;
-        }
-
-        if (isAccessibility(payload.user)) {
-          this.user = payload.user;
-        }
-
-        return response;
+      const response = await axios.request({
+        method: 'post',
+        url: `${options.endpoint}/login`,
+        data,
       });
+
+      this.token = response.data.access_token;
+
+      return this.fetchUser(options);
     },
 
-    loggout() {
-      return new Promise((resolve) => {
-        this.user = null;
-        resolve();
+    async fetchUser(options = {}) {
+      if (this.token === null) {
+        return;
+      }
+
+      options = {
+        endpoint: '/auth',
+        ...options,
+      };
+
+      const { token } = this;
+
+      const response = await axios.request({
+        method: 'get',
+        url: `${options.endpoint}/user`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
+      let userData = response.data;
+      if (isAccessibility(userData.data)) {
+        userData = userData.data;
+      }
+
+      this.user = userData;
+
+      return response;
+    },
+
+    async loggout() {
+      this.user = null;
+      this.token = null;
     },
   },
 
   computed: {
     isLoggedIn() {
-      return typeof this.user === 'object' && this.user != null;
+      return isAccessibility(this.user);
     },
   },
 };
