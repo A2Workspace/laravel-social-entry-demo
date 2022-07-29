@@ -4,8 +4,14 @@
       <h2 class="sign-in-box__header">Social Entry</h2>
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
       <form class="sign-in-box__form" :class="{ '--shaking': errorMessage }" @submit.prevent="handleLogin">
-        <input type="text" placeholder="Username" v-model="form.username" />
-        <input type="password" placeholder="Password" autocomplete="new-password" v-model="form.password" />
+        <input type="text" placeholder="Username" ref="inputUsername" v-model="form.username" />
+        <input
+          type="password"
+          placeholder="Password"
+          autocomplete="new-password"
+          ref="inputPassword"
+          v-model="form.password"
+        />
         <button>Sign In</button>
       </form>
     </div>
@@ -44,16 +50,44 @@ export default {
   },
 
   methods: {
-    handleLogin() {
+    async handleLogin() {
       this.resetErrors();
+
+      if (!this.validateFormInputs()) {
+        return;
+      }
 
       const { username, password } = this.form;
 
-      this.loginWith('user', { username, password }).catch((error) => {
-        if (error.isAxiosError) {
-          this.errorMessage = error.response?.data?.error;
+      try {
+        await this.loginWith('user', { username, password });
+      } catch (error) {
+        if (!error.isAxiosError) {
+          throw error;
         }
-      });
+
+        const { response } = error;
+
+        if (response.status === 401) {
+          this.$refs.inputPassword.select();
+        }
+
+        this.errorMessage = response.data.error;
+      }
+    },
+
+    validateFormInputs() {
+      if (this.form.username == '') {
+        this.$refs.inputUsername.focus();
+        return false;
+      }
+
+      if (this.form.password == '') {
+        this.$refs.inputPassword.focus();
+        return false;
+      }
+
+      return true;
     },
 
     resetErrors() {
