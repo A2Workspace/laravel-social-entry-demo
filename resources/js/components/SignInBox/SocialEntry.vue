@@ -1,5 +1,5 @@
 <template>
-  <a class="social-entry" href="#" @click="handleAuthorization">
+  <a class="social-entry" href="#" draggable="false" @click="handleAuthorization">
     <i :class="iconClassName"></i>
   </a>
 </template>
