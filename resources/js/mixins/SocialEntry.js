@@ -8,9 +8,11 @@ export default {
   },
 
   provide() {
-    return {
+    const $socialEntry = {
       authorize: this.authorize,
     };
+
+    return { $socialEntry };
   },
 
   methods: {

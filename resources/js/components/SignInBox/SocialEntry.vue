@@ -12,11 +12,11 @@ export default {
     },
   },
 
-  inject: ['authorize'],
+  inject: ['$socialEntry'],
 
   methods: {
     handleAuthorization() {
-      this.authorize(this.provider).redirect();
+      this.$socialEntry.authorize(this.provider).redirect();
     },
   },
 

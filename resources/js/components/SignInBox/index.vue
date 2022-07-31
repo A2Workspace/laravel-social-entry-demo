@@ -55,7 +55,7 @@ export default {
   name: 'SignInBox',
   components: { SocialEntry },
 
-  inject: ['loginWith'],
+  inject: ['$auth'],
 
   data() {
     return {
@@ -86,7 +86,7 @@ export default {
       const { username, password } = this.form;
       const certificate = { username, password };
 
-      return this.loginWith('user', certificate)
+      return this.$auth.loginWith('user', certificate)
         .catch((error) => {
           this.handleLoginError(error);
         })

@@ -9,34 +9,42 @@ export default {
   },
 
   provide() {
-    return {
+    const $auth = {
+      login: this.login,
       loginWith: this.loginWith,
       loggout: this.loggout,
       isLoggedIn: () => this.isLoggedIn,
       user: () => this.user,
     };
+
+    return { $auth };
   },
 
   methods: {
-    async loginWith(provider, data) {
-      let options = {};
-
-      if (provider === 'admin') {
-        options = {
-          endpoint: '/admin/auth',
-          // ...
-        };
-      } else {
-        options = {
-          endpoint: '/auth',
-          // ...
-        };
+    loginWith(provider, options) {
+      if (typeof options.data === 'undefined') {
+        options = { data: options };
       }
 
-      const response = await axios.request({
+      if (provider === 'admin') {
+        options.endpoint = '/admin/auth';
+      }
+
+      return this.login(options);
+    },
+
+    async login(options) {
+      options = {
         method: 'post',
+        endpoint: '/auth',
+        data: {},
+        ...options,
+      };
+
+      const response = await axios.request({
+        method: options.method,
         url: `${options.endpoint}/login`,
-        data,
+        data: options.data,
       });
 
       this.token = response.data.access_token;
