@@ -1,18 +1,25 @@
 import axios from 'axios';
 
 const moduleOptions = {
-  endpoints: {
-    authorization: '/auth/socialite',
-    token: '/auth/socialite/token',
+  authorization: '/auth/socialite',
+  strategies: {
+    user: {
+      url: '/auth/socialite',
+    },
+    admin: {
+      url: '/admin/auth/socialite',
+    },
   },
 };
 
 export default {
   data() {
     return {
-      processing: null,
-      accessToken: null,
-      lastAccessTokenResponse: null,
+      socialEntryState: {
+        processing: null,
+        accessToken: null,
+        lastAccessTokenResponse: null,
+      },
     };
   },
 
@@ -20,17 +27,19 @@ export default {
     const $socialEntry = {
       authorize: this.authorize,
       completeAuthorization: this.completeAuthorization,
+      loginWithToken: this.loginWithToken,
+      accessToken: () => this.socialEntryState.accessToken,
+      lastAccessTokenResponse: () => this.socialEntryState.lastAccessTokenResponse,
     };
 
     return { $socialEntry };
   },
 
   methods: {
-    /**
-     * @param {string} provider
-     * @param {(string|null)} continueUrl
-     * @returns {RedirectRequest}
-     */
+    // =========================================================================
+    // = Authorization
+    // =========================================================================
+
     authorize(provider, continueUrl) {
       continueUrl = continueUrl || window.location.href;
 
@@ -47,10 +56,6 @@ export default {
       };
     },
 
-    /**
-     * @param {(string|null)} code
-     * @returns {Promise}
-     */
     completeAuthorization(code = null) {
       code = code || getParam('code');
 
@@ -58,12 +63,12 @@ export default {
         return new Promise(() => {});
       }
 
-      if (this.processing) {
-        return this.processing;
+      if (this.socialEntryState.processing) {
+        return this.socialEntryState.processing;
       }
 
-      if (this.lastAccessTokenResponse) {
-        return Promise.resolve(this.lastAccessTokenResponse);
+      if (this.socialEntryState.lastAccessTokenResponse) {
+        return Promise.resolve(this.socialEntryState.lastAccessTokenResponse);
       }
 
       // 這裡我們創建一個 AxiosRequest 並帶入 auth_code 向後端完成授權，
@@ -73,13 +78,13 @@ export default {
       let endpoint = `${baseUrl}/auth/socialite/token`;
 
       let request = axios.request({
-        method: 'post',
+        method: 'POST',
         url: endpoint,
         data: { code },
       });
 
       request = request.then((response) => {
-        this.lastAccessTokenResponse = response;
+        this.socialEntryState.lastAccessTokenResponse = response;
 
         return response;
       });
@@ -89,17 +94,16 @@ export default {
           throw error;
         }
 
-        // Reset params in current url.
-        window.history.replaceState({}, window.document.title, window.location.href.split('?')[0]);
+        resetParams();
 
         window.alert(`${error.response.data.message} (Status Code: ${error.response.status})`);
       });
 
       request = request.finally(() => {
-        this.processing = null;
+        this.socialEntryState.processing = null;
       });
 
-      this.processing = request;
+      this.socialEntryState.processing = request;
 
       return request;
     },
@@ -109,7 +113,7 @@ export default {
      * @returns {Promise}
      */
     loginWithToken(response) {
-      response = response || this.lastAccessTokenResponse;
+      response = response || this.socialEntryState.lastAccessTokenResponse;
 
       const accessToken = response.data.access_token;
 
@@ -117,7 +121,7 @@ export default {
       let endpoint = `${baseUrl}/auth/socialite/login`;
 
       let request = axios.request({
-        method: 'post',
+        method: 'POST',
         url: endpoint,
         data: { access_token: accessToken },
       });
@@ -125,17 +129,14 @@ export default {
   },
 };
 
-/**
- * @param {string} key
- * @returns {string}
- */
+// =============================================================================
+// = Helpers
+// =============================================================================
+
 export function getParam(key) {
   return new URLSearchParams(window.location.search).get(key);
 }
 
-/**
- * @typedef RedirectRequest
- * @type {Object}
- * @property {function():string} getTargetUrl
- * @property {function():void} redirect
- */
+export function resetParams() {
+  window.history.replaceState({}, window.document.title, window.location.href.split('?')[0]);
+}
