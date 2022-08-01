@@ -1,12 +1,20 @@
 .sign-in-box {
     width: 400px;
-
     margin: 30px auto;
-
     background: #fff;
     border: 1px solid #efefef;
     border-radius: 2px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.sign-in-box a:not(.classic) {
+    color: inherit;
+    text-decoration: none;
+}
+
+.sign-in-box a:not(.classic):hover {
+    opacity: 0.8;
+    /* text-decoration: underline; */
 }
 
 .sign-in-box__inner {
@@ -78,6 +86,46 @@
     line-height: 1;
 }
 
+/* =============================================================================
+* = .sign-in-box__actions
+** ========================================================================== */
+
+.sign-in-box__actions {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 1em 0;
+    padding: 0 2px;
+
+    color: #555;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.sign-in-box__top-actions {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    padding: 10px 10px 0;
+
+    color: #555;
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* =============================================================================
+* = .sign-in-box__social-entry
+** ========================================================================== */
+
 .sign-in-box__social-entry {
     margin-bottom: 30px;
 }
@@ -97,4 +145,3 @@
     align-items: center;
     gap: 10px;
 }
-

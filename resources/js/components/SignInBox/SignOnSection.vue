@@ -1,43 +1,53 @@
 <template>
   <div class="sign-in-box__inner">
+    <div class="sign-in-box__top-actions">
+      <a href="#" draggable="false" @click="toLoginPage">
+        <span>Sign On</span>
+      </a>
+    </div>
+
     <div class="sign-in-box__contain">
       <SectionHeader></SectionHeader>
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
-      <form class="sign-in-box__form" :class="{ '--shaking': errorMessage }" @submit.prevent="handleLogin">
+      <form class="sign-in-box__form" ref="form" :class="{ '--shaking': errorMessage }" @submit.prevent="handleSignOn">
         <SectionFormItem
           type="text"
           label="Username"
-          ref="inputUsername"
+          name="username"
           :disabled="isProcessing"
+          :error="errors.username"
           v-model="form.username"
         />
 
         <SectionFormItem
           type="password"
           label="Password"
+          name="password"
           autocomplete="new-password"
-          ref="inputPassword"
           :disabled="isProcessing"
+          :error="errors.password"
           v-model="form.password"
         />
 
         <SectionFormItem
           type="text"
           label="Nickname"
-          ref="inputNickname"
+          name="nickname"
           :disabled="isProcessing"
+          :error="errors.nickname"
           v-model="form.nickname"
         />
 
-        <SectionButton :processing="isProcessing">Create User</SectionButton>
+        <SectionButton :processing="isProcessing">Create Account</SectionButton>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import SectionButton from './SectionButton';
 import SectionFormItem from './SectionFormItem';
 import SectionHeader from './SectionHeader';
@@ -49,7 +59,7 @@ export default {
     SectionHeader,
   },
 
-  inject: ['$auth'],
+  inject: ['toLoginPage'],
 
   props: {
     formData: {
@@ -60,7 +70,7 @@ export default {
 
   data() {
     return {
-      processing: false,
+      processing: null,
       errors: {},
       errorMessage: null,
       form: {
@@ -73,69 +83,80 @@ export default {
   },
 
   methods: {
-    handleLogin() {
+    handleSignOn() {
       this.resetErrors();
 
       if (!this.validateFormInputs()) {
         return;
       }
 
-      if (this.processing) {
-        return;
-      }
-
-      this.processing = true;
-
-      const { username, password } = this.form;
-      const certificate = { username, password };
-
-      return this.$auth
-        .loginWith('user', certificate)
-        .catch((error) => {
-          this.handleLoginError(error);
-        })
-        .finally(() => {
-          this.processing = false;
-        });
-    },
-
-    validateFormInputs() {
-      if (this.form.username == '') {
-        setTimeout(() => this.$refs.inputUsername.focus());
-        return false;
-      }
-
-      if (this.form.password == '') {
-        setTimeout(() => this.$refs.inputPassword.focus());
-        return false;
-      }
-
-      return true;
-    },
-
-    handleLoginError(error) {
-      if (!error.isAxiosError) {
-        throw error;
-      }
-
-      const { response } = error;
-
-      this.errorMessage = response.data.error;
+      this.doHandleSignOn();
     },
 
     resetErrors() {
       this.errors = {};
       this.errorMessage = null;
     },
+
+    validateFormInputs() {
+      if (this.form.username == '') {
+        setTimeout(() => {
+          this.$refs.form.querySelector('[name="username"]').focus();
+        });
+
+        return false;
+      }
+
+      if (this.form.password == '') {
+        setTimeout(() => {
+          this.$refs.form.querySelector('[name="password"]').focus();
+        });
+
+        return false;
+      }
+
+      return true;
+    },
+
+    doHandleSignOn() {
+      if (this.processing) {
+        return;
+      }
+
+      let request = axios.post('/api/register', this.form);
+
+      request = request.then((response) => {
+        window.alert(`New user created`);
+        window.location.reload('');
+      });
+
+      request = request.catch((error) => {
+        if (!error.isAxiosError) {
+          throw error;
+        }
+
+        const { response } = error;
+
+        this.errorMessage = response.data.message || `Status Code: ${response.status}`;
+
+        if (response.status === 422 && typeof response.data.errors === 'object') {
+          this.errors = response.data.errors;
+        }
+      });
+
+      request = request.finally(() => {
+        this.processing = false;
+      });
+
+      this.processing = request;
+
+      return request;
+    },
   },
 
   computed: {
     isProcessing() {
-      return this.processing;
-    },
-
-    homePage() {
-      return window.location.origin;
+      return Boolean(this.processing);
     },
   },
 };

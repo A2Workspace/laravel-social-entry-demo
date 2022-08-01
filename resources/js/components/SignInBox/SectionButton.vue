@@ -11,6 +11,8 @@
 
 <script>
 export default {
+  inheritAttrs: false,
+
   props: {
     icon: {
       default: 'far fa-spinner-third',

@@ -1,5 +1,13 @@
 <template>
   <div class="sign-in-box__inner">
+    <div class="sign-in-box__top-actions">
+      <span></span>
+      <a href="#" draggable="false" @click="toRegisterPage">
+        <span>Register</span>
+        <i class="fas fa-external-link" />
+      </a>
+    </div>
+
     <div class="sign-in-box__contain">
       <SectionHeader></SectionHeader>
 
@@ -57,7 +65,7 @@ export default {
     SocialEntry,
   },
 
-  inject: ['$auth'],
+  inject: ['$auth', 'toRegisterPage'],
 
   data() {
     return {

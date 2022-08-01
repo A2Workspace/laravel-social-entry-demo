@@ -10,6 +10,8 @@
 
 <script>
 export default {
+  inheritAttrs: false,
+
   props: {
     text: {
       default: 'Social Entry',

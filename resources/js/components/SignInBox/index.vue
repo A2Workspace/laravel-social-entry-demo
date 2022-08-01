@@ -17,10 +17,16 @@ export default {
 
   data() {
     return {
-      status: 'sign_on',
-      // status: 'general',
+      status: 'sign_in',
       defaultFormData: null,
     };
+  },
+
+  provide() {
+    return {
+      toLoginPage: () => this.status = 'sign_in',
+      toRegisterPage: () => this.status = 'sign_on',
+    }
   },
 
   methods: {},
