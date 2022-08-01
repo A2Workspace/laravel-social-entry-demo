@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <ProfilePage v-if="isLoggedIn" />
+    <ProfilePage v-if="$auth.loggedIn" />
     <LoginPage v-else />
   </div>
 </template>

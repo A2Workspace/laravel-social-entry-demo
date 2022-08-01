@@ -1,105 +1,145 @@
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      user: null,
-      token: null,
-    };
-  },
-
-  provide() {
-    const $auth = {
-      login: this.login,
-      loginWith: this.loginWith,
-      loggout: this.loggout,
-      isLoggedIn: () => this.isLoggedIn,
-      user: () => this.user,
-    };
-
-    return { $auth };
-  },
-
-  methods: {
-    loginWith(provider, options) {
-      if (typeof options.data === 'undefined') {
-        options = { data: options };
-      }
-
-      if (provider === 'admin') {
-        options.endpoint = '/admin/auth';
-      }
-
-      return this.login(options);
+const moduleOptions = {
+  strategies: {
+    user: {
+      url: '/auth',
     },
-
-    async login(options) {
-      options = {
-        method: 'post',
-        endpoint: '/auth',
-        data: {},
-        ...options,
-      };
-
-      const response = await axios.request({
-        method: options.method,
-        url: `${options.endpoint}/login`,
-        data: options.data,
-      });
-
-      this.token = response.data.access_token;
-
-      return this.fetchUser(options);
-    },
-
-    async fetchUser(options = {}) {
-      options = {
-        endpoint: '/auth',
-        token: this.token,
-        ...options,
-      };
-
-      if (options.token === null) {
-        throw new Error('Invalid user token');
-      }
-
-      const response = await axios.request({
-        method: 'get',
-        url: `${options.endpoint}/user`,
-        headers: {
-          Authorization: `Bearer ${options.token}`,
-        },
-      });
-
-      let userData = response.data;
-      if (isAccessibility(userData.data)) {
-        userData = userData.data;
-      }
-
-      this.user = userData;
-
-      return response;
-    },
-
-    async loggout() {
-      this.user = null;
-      this.token = null;
-    },
-
-    setUserToken(token) {
-      this.token = token;
-
-      return this.fetchUser();
-    },
-  },
-
-  computed: {
-    isLoggedIn() {
-      return isAccessibility(this.user);
+    admin: {
+      url: '/admin/auth',
     },
   },
 };
 
+// =============================================================================
+// = AuthService
+// =============================================================================
+
+class AuthService {
+  constructor() {
+    this.user = null;
+    this.token = null;
+    this.strategy = moduleOptions.strategies['user'];
+  }
+
+  // ===========================================================================
+  // = Strategies & Options
+  // ===========================================================================
+
+  setStrategy(name) {
+    this.strategy = moduleOptions.strategies[name];
+
+    return this;
+  }
+
+  // ===========================================================================
+  // = AuthService > Login
+  // ===========================================================================
+
+  loginWith(strategy, options = {}) {
+    return this.setStrategy(strategy).login(options);
+  }
+
+  async login(options = {}) {
+    if (typeof options.data === 'undefined') {
+      options = { data: options };
+    }
+
+    options = {
+      data: {},
+      ...this.strategy,
+      ...options,
+    };
+
+    let request = axios.request({
+      method: 'POST',
+      url: `${options.url}/login`,
+      data: options.data,
+    });
+
+    const response = await request;
+    this.token = response.data.access_token;
+
+    return await this.fetchUser(options);
+  }
+
+  // ===========================================================================
+  // = AuthService > Logout
+  // ===========================================================================
+
+  logout() {
+    this.user = null;
+    this.token = null;
+
+    return Promise.resolve(true);
+  }
+
+  // ===========================================================================
+  // = AuthService > fetchUser
+  // ===========================================================================
+
+  async fetchUser(options = {}) {
+    options = {
+      endpoint: '/auth',
+      token: this.token,
+      ...options,
+    };
+
+    if (options.token === null) {
+      throw new Error('Invalid user token');
+    }
+
+    const response = await axios.request({
+      method: 'get',
+      url: `${options.endpoint}/user`,
+      headers: {
+        Authorization: `Bearer ${options.token}`,
+      },
+    });
+
+    let userData = response.data;
+    if (isAccessibility(userData.data)) {
+      userData = userData.data;
+    }
+
+    this.user = userData;
+
+    return response;
+  }
+
+  async setUserToken(token) {
+    this.token = token;
+
+    return await this.fetchUser();
+  }
+
+  // ===========================================================================
+  // = AuthService > Helpers
+  // ===========================================================================
+
+  get loggedIn() {
+    return isAccessibility(this.user);
+  }
+}
+
+// =============================================================================
+// = Utils
+// =============================================================================
+
 function isAccessibility(value) {
   return typeof value === 'object' && value !== null;
 }
+
+// =============================================================================
+// = Mixin Module
+// =============================================================================
+
+export default {
+  provide() {
+    return { $auth: this.$auth };
+  },
+
+  beforeCreate() {
+    this.$auth = new AuthService();
+  },
+};
