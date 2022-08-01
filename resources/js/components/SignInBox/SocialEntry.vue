@@ -1,18 +1,18 @@
 <template>
-  <a class="social-entry" href="#" draggable="false" @click="handleAuthorization">
+  <a class="social-entry" :href="targetUrl" draggable="false" @click="handleAuthorization">
     <i :class="iconClassName"></i>
   </a>
 </template>
 
 <script>
 export default {
+  inject: ['$socialEntry'],
+
   props: {
     provider: {
       require: true,
     },
   },
-
-  inject: ['$socialEntry'],
 
   methods: {
     handleAuthorization() {
@@ -21,6 +21,10 @@ export default {
   },
 
   computed: {
+    targetUrl() {
+      this.$socialEntry.authorize(this.provider).getTargetUrl();
+    },
+
     iconClassName() {
       return `fab fa-${this.provider}`;
     },
@@ -45,6 +49,7 @@ export default {
   vertical-align: baseline;
   font-size: 26px;
 
+  cursor: pointer;
   user-select: none;
 }
 

@@ -53,22 +53,21 @@ export default {
     },
 
     async fetchUser(options = {}) {
-      if (this.token === null) {
-        return;
-      }
-
       options = {
         endpoint: '/auth',
+        token: this.token,
         ...options,
       };
 
-      const { token } = this;
+      if (options.token === null) {
+        throw new Error('Invalid user token');
+      }
 
       const response = await axios.request({
         method: 'get',
         url: `${options.endpoint}/user`,
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${options.token}`,
         },
       });
 
@@ -85,6 +84,12 @@ export default {
     async loggout() {
       this.user = null;
       this.token = null;
+    },
+
+    setUserToken(token) {
+      this.token = token;
+
+      return this.fetchUser();
     },
   },
 
