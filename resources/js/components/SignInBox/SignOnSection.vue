@@ -25,20 +25,17 @@
           v-model="form.password"
         />
 
-        <SubmitButton :processing="isProcessing">Sign In</SubmitButton>
-      </form>
-    </div>
+        <input
+          class="sign-in-box__input"
+          type="text"
+          placeholder="Nickname"
+          ref="inputNickname"
+          :disabled="isProcessing"
+          v-model="form.nickname"
+        />
 
-    <div class="sign-in-box__contain">
-      <div class="sign-in-box__social-entry">
-        <p class="sign-in-box__social-entry-text">or continue with</p>
-        <div class="sign-in-box__social-entry-links">
-          <SocialEntry provider="github" />
-          <SocialEntry provider="google" />
-          <SocialEntry provider="facebook" />
-          <SocialEntry provider="line" />
-        </div>
-      </div>
+        <SubmitButton :processing="isProcessing">Create User</SubmitButton>
+      </form>
     </div>
   </div>
 </template>
@@ -46,13 +43,11 @@
 <script>
 import SignInBoxHeader from './SignInBoxHeader';
 import SubmitButton from './SubmitButton';
-import SocialEntry from './SocialEntry';
 
 export default {
   components: {
     SignInBoxHeader,
     SubmitButton,
-    SocialEntry,
   },
 
   inject: ['$auth'],
@@ -60,12 +55,13 @@ export default {
   data() {
     return {
       processing: false,
-      form: {
-        username: '',
-        password: '',
-      },
       errors: {},
       errorMessage: null,
+      form: {
+        username: '',
+        nickname: '',
+        password: '',
+      },
     };
   },
 

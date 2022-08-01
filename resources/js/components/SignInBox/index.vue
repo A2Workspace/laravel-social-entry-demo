@@ -1,20 +1,23 @@
 <template>
   <div class="sign-in-box">
-    <SignInSection />
+    <SignOnSection v-if="'sign_on' === status" />
+    <SignInSection v-else />
   </div>
 </template>
 
 <script>
 import SignInSection from './SignInSection';
+import SignOnSection from './SignOnSection';
 
 export default {
   name: 'SignInBox',
-  components: { SignInSection },
+  components: { SignInSection, SignOnSection },
 
   inject: ['$auth', '$socialEntry'],
 
   data() {
     return {
+      status: 'sign_on',
       status: 'general',
     };
   },
