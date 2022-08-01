@@ -11,135 +11,125 @@ const moduleOptions = {
   },
 };
 
-// =============================================================================
-// = AuthService
-// =============================================================================
-
-class AuthService {
-  constructor() {
-    this.user = null;
-    this.token = null;
-    this.strategy = moduleOptions.strategies['user'];
-  }
-
-  // ===========================================================================
-  // = Strategies & Options
-  // ===========================================================================
-
-  setStrategy(name) {
-    this.strategy = moduleOptions.strategies[name];
-
-    return this;
-  }
-
-  // ===========================================================================
-  // = AuthService > Login
-  // ===========================================================================
-
-  loginWith(strategy, options = {}) {
-    return this.setStrategy(strategy).login(options);
-  }
-
-  async login(options = {}) {
-    if (typeof options.data === 'undefined') {
-      options = { data: options };
-    }
-
-    options = {
-      data: {},
-      ...this.strategy,
-      ...options,
-    };
-
-    let request = axios.request({
-      method: 'POST',
-      url: `${options.url}/login`,
-      data: options.data,
-    });
-
-    const response = await request;
-    this.token = response.data.access_token;
-
-    return await this.fetchUser(options);
-  }
-
-  // ===========================================================================
-  // = AuthService > Logout
-  // ===========================================================================
-
-  logout() {
-    this.user = null;
-    this.token = null;
-
-    return Promise.resolve(true);
-  }
-
-  // ===========================================================================
-  // = AuthService > fetchUser
-  // ===========================================================================
-
-  async fetchUser(options = {}) {
-    options = {
-      endpoint: '/auth',
-      token: this.token,
-      ...options,
-    };
-
-    if (options.token === null) {
-      throw new Error('Invalid user token');
-    }
-
-    const response = await axios.request({
-      method: 'get',
-      url: `${options.endpoint}/user`,
-      headers: {
-        Authorization: `Bearer ${options.token}`,
+export default {
+  data() {
+    return {
+      authState: {
+        user: null,
+        token: null,
+        strategy: moduleOptions.strategies['user'],
       },
-    });
+    };
+  },
 
-    let userData = response.data;
-    if (isAccessibility(userData.data)) {
-      userData = userData.data;
-    }
+  computed: {
+    loggedIn() {
+      return isAccessibility(this.authState.user);
+    },
 
-    this.user = userData;
+    user() {
+      return this.authState.user;
+    },
+  },
 
-    return response;
-  }
+  provide() {
+    const $auth = {
+      login: this.login,
+      loginWith: this.loginWith,
+      loggout: this.loggout,
+      loggedIn: () => this.loggedIn,
+      user: () => this.user,
+    };
 
-  async setUserToken(token) {
-    this.token = token;
+    return { $auth };
+  },
 
-    return await this.fetchUser();
-  }
+  methods: {
+    setStrategy(name) {
+      this.authState.strategy = moduleOptions.strategies[name];
 
-  // ===========================================================================
-  // = AuthService > Helpers
-  // ===========================================================================
+      return this;
+    },
 
-  get loggedIn() {
-    return isAccessibility(this.user);
-  }
-}
+    // =========================================================================
+    // = Login & Logout
+    // =========================================================================
 
-// =============================================================================
-// = Utils
-// =============================================================================
+    loginWith(strategy, options = {}) {
+      return this.setStrategy(strategy).login(options);
+    },
+
+    async login(options = {}) {
+      if (typeof options.data === 'undefined') {
+        options = { data: options };
+      }
+
+      options = {
+        data: {},
+        ...this.authState.strategy,
+        ...options,
+      };
+
+      let request = axios.request({
+        method: 'POST',
+        url: `${options.url}/login`,
+        data: options.data,
+      });
+
+      const response = await request;
+      this.authState.token = response.data.access_token;
+
+      return await this.fetchUser(options);
+    },
+
+    logout() {
+      this.authState.user = null;
+      this.authState.token = null;
+
+      return Promise.resolve(true);
+    },
+
+    // =========================================================================
+    // = User
+    // =========================================================================
+
+    async fetchUser(options = {}) {
+      options = {
+        token: this.authState.token,
+        ...this.authState.strategy,
+        ...options,
+      };
+
+      if (options.token === null) {
+        throw new Error('Invalid user token');
+      }
+
+      const response = await axios.request({
+        method: 'GET',
+        url: `${options.url}/user`,
+        headers: {
+          Authorization: `Bearer ${options.token}`,
+        },
+      });
+
+      let userData = response.data;
+      if (isAccessibility(userData.data)) {
+        userData = userData.data;
+      }
+
+      this.authState.user = userData;
+
+      return response;
+    },
+
+    async setUserToken(token) {
+      this.authState.token = token;
+
+      return await this.fetchUser();
+    },
+  },
+};
 
 function isAccessibility(value) {
   return typeof value === 'object' && value !== null;
 }
-
-// =============================================================================
-// = Mixin Module
-// =============================================================================
-
-export default {
-  provide() {
-    return { $auth: this.$auth };
-  },
-
-  beforeCreate() {
-    this.$auth = new AuthService();
-  },
-};
