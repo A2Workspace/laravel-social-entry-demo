@@ -145,7 +145,7 @@ export default {
       });
 
       request = request.finally(() => {
-        this.processing = false;
+        this.processing = null;
       });
 
       this.processing = request;

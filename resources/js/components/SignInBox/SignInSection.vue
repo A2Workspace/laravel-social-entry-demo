@@ -13,22 +13,20 @@
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
-      <form class="sign-in-box__form" :class="{ '--shaking': errorMessage }" @submit.prevent="handleLogin">
-        <input
-          class="sign-in-box__input"
+      <form class="sign-in-box__form" ref="form" :class="{ '--shaking': errorMessage }" @submit.prevent="handleLogin">
+        <SectionFormItem
           type="text"
-          placeholder="Username"
-          ref="inputUsername"
+          label="Username"
+          name="username"
           :disabled="isProcessing"
           v-model="form.username"
         />
 
-        <input
-          class="sign-in-box__input"
+        <SectionFormItem
           type="password"
-          placeholder="Password"
+          label="Password"
+          name="password"
           autocomplete="new-password"
-          ref="inputPassword"
           :disabled="isProcessing"
           v-model="form.password"
         />
@@ -87,6 +85,35 @@ export default {
         return;
       }
 
+      this.doHandleLogin();
+    },
+
+    resetErrors() {
+      this.errors = {};
+      this.errorMessage = null;
+    },
+
+    validateFormInputs() {
+      if (this.form.username == '') {
+        setTimeout(() => {
+          this.$refs.form.querySelector('[name="username"]').focus();
+        });
+
+        return false;
+      }
+
+      if (this.form.password == '') {
+        setTimeout(() => {
+          this.$refs.form.querySelector('[name="password"]').focus();
+        });
+
+        return false;
+      }
+
+      return true;
+    },
+
+    doHandleLogin() {
       if (this.processing) {
         return;
       }
@@ -96,43 +123,21 @@ export default {
       const { username, password } = this.form;
       const certificate = { username, password };
 
-      return this.$auth
-        .loginWith('user', certificate)
-        .catch((error) => {
-          this.handleLoginError(error);
-        })
-        .finally(() => {
-          this.processing = false;
-        });
-    },
+      let request = this.$auth.loginWith('user', certificate);
 
-    validateFormInputs() {
-      if (this.form.username == '') {
-        setTimeout(() => this.$refs.inputUsername.focus());
-        return false;
-      }
+      request = request.catch((error) => {
+        if (!error.isAxiosError) {
+          throw error;
+        }
 
-      if (this.form.password == '') {
-        setTimeout(() => this.$refs.inputPassword.focus());
-        return false;
-      }
+        this.errorMessage = error.response.data.error;
+      });
 
-      return true;
-    },
+      request = request.finally(() => {
+        this.processing = null;
+      });
 
-    handleLoginError(error) {
-      if (!error.isAxiosError) {
-        throw error;
-      }
-
-      const { response } = error;
-
-      this.errorMessage = response.data.error;
-    },
-
-    resetErrors() {
-      this.errors = {};
-      this.errorMessage = null;
+      this.processing = request;
     },
   },
 
