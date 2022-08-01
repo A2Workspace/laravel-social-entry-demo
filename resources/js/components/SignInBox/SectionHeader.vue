@@ -1,6 +1,6 @@
 <template>
-  <div class="sign-in-box-header">
-    <h2 class="sign-in-box-header__text">
+  <div class="section-header">
+    <h2 class="section-header__text">
       <a :href="homePage" draggable="false">
         <slot>{{ text }}</slot>
       </a>
@@ -25,12 +25,12 @@ export default {
 </script>
 
 <style scoped>
-.sign-in-box-header {
+.section-header {
   margin-bottom: 42px;
   user-select: none;
 }
 
-.sign-in-box-header__text {
+.section-header__text {
   margin: 0;
   padding: 0;
 
@@ -40,12 +40,12 @@ export default {
   text-align: center;
 }
 
-.sign-in-box-header__text a {
+.section-header__text a {
   color: inherit;
   text-decoration: none;
 }
 
-.sign-in-box-header__text a:hover {
+.section-header__text a:hover {
   opacity: 0.82;
 }
 </style>

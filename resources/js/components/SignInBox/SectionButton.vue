@@ -1,9 +1,9 @@
 <template>
-  <button class="submit-button" :disabled="processing">
+  <button class="section-button" :disabled="processing">
     <span v-show="!processing">
       <slot>{{ text }}</slot>
     </span>
-    <span class="submit-button__icon" v-show="processing">
+    <span class="section-button__icon" v-show="processing">
       <i :class="icon" />
     </span>
   </button>
@@ -26,7 +26,7 @@ export default {
 </script>
 
 <style scoped>
-.submit-button {
+.section-button {
   box-sizing: border-box;
   width: 100%;
   height: 44px;
@@ -45,27 +45,27 @@ export default {
   user-select: none;
 }
 
-.submit-button:hover {
+.section-button:hover {
   background-color: #545f78;
   transition: background-color 200ms ease-out;
 }
 
-.submit-button:active {
+.section-button:active {
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2) inset;
   padding-top: 3px;
 }
 
-.submit-button:disabled {
+.section-button:disabled {
   background-color: #3f475a !important;
   color: #ccc;
   cursor: progress;
 }
 
-.submit-button__icon {
+.section-button__icon {
   font-size: 1.3em;
 }
 
-.submit-button__icon i {
+.section-button__icon i {
   animation: spin 900ms linear infinite;
 }
 

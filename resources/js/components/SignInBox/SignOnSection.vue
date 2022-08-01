@@ -1,56 +1,62 @@
 <template>
   <div class="sign-in-box__inner">
     <div class="sign-in-box__contain">
-      <SignInBoxHeader></SignInBoxHeader>
+      <SectionHeader></SectionHeader>
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
       <form class="sign-in-box__form" :class="{ '--shaking': errorMessage }" @submit.prevent="handleLogin">
-        <input
-          class="sign-in-box__input"
+        <SectionFormItem
           type="text"
-          placeholder="Username"
+          label="Username"
           ref="inputUsername"
           :disabled="isProcessing"
           v-model="form.username"
         />
 
-        <input
-          class="sign-in-box__input"
+        <SectionFormItem
           type="password"
-          placeholder="Password"
+          label="Password"
           autocomplete="new-password"
           ref="inputPassword"
           :disabled="isProcessing"
           v-model="form.password"
         />
 
-        <input
-          class="sign-in-box__input"
+        <SectionFormItem
           type="text"
-          placeholder="Nickname"
+          label="Nickname"
           ref="inputNickname"
           :disabled="isProcessing"
           v-model="form.nickname"
         />
 
-        <SubmitButton :processing="isProcessing">Create User</SubmitButton>
+        <SectionButton :processing="isProcessing">Create User</SectionButton>
       </form>
     </div>
   </div>
 </template>
 
 <script>
-import SignInBoxHeader from './SignInBoxHeader';
-import SubmitButton from './SubmitButton';
+import SectionButton from './SectionButton';
+import SectionFormItem from './SectionFormItem';
+import SectionHeader from './SectionHeader';
 
 export default {
   components: {
-    SignInBoxHeader,
-    SubmitButton,
+    SectionButton,
+    SectionFormItem,
+    SectionHeader,
   },
 
   inject: ['$auth'],
+
+  props: {
+    formData: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
 
   data() {
     return {
@@ -61,6 +67,7 @@ export default {
         username: '',
         nickname: '',
         password: '',
+        ...this.formData,
       },
     };
   },

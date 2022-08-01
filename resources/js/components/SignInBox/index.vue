@@ -1,6 +1,6 @@
 <template>
   <div class="sign-in-box">
-    <SignOnSection v-if="'sign_on' === status" />
+    <SignOnSection v-if="'sign_on' === status" :formData="defaultFormData" />
     <SignInSection v-else />
   </div>
 </template>
@@ -18,7 +18,8 @@ export default {
   data() {
     return {
       status: 'sign_on',
-      status: 'general',
+      // status: 'general',
+      defaultFormData: null,
     };
   },
 
@@ -29,7 +30,13 @@ export default {
   mounted() {
     this.$socialEntry.completeAuthorization().then((response) => {
       if (response.data.new_user || response.data.local_user_id == null) {
-        window.alert('該帳號尚未註冊');
+        this.status = 'sign_on';
+
+        this.defaultFormData = {
+          username: response.data.social_email,
+          nickname: response.data.social_name,
+        }
+        // window.alert('該帳號尚未註冊');
 
         return;
       }

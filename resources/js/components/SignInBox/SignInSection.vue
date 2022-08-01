@@ -1,7 +1,7 @@
 <template>
   <div class="sign-in-box__inner">
     <div class="sign-in-box__contain">
-      <SignInBoxHeader></SignInBoxHeader>
+      <SectionHeader></SectionHeader>
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
@@ -25,7 +25,7 @@
           v-model="form.password"
         />
 
-        <SubmitButton :processing="isProcessing">Sign In</SubmitButton>
+        <SectionButton :processing="isProcessing">Sign In</SectionButton>
       </form>
     </div>
 
@@ -44,14 +44,16 @@
 </template>
 
 <script>
-import SignInBoxHeader from './SignInBoxHeader';
-import SubmitButton from './SubmitButton';
+import SectionButton from './SectionButton';
+import SectionFormItem from './SectionFormItem';
+import SectionHeader from './SectionHeader';
 import SocialEntry from './SocialEntry';
 
 export default {
   components: {
-    SignInBoxHeader,
-    SubmitButton,
+    SectionButton,
+    SectionFormItem,
+    SectionHeader,
     SocialEntry,
   },
 
