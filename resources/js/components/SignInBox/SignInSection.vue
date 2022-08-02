@@ -154,7 +154,8 @@ export default {
 </script>
 
 <style scoped>
-.sign-in-box__inner {
-  min-height: 520px;
+.sign-in-box__form {
+  min-height: 250px;
 }
 </style>
+

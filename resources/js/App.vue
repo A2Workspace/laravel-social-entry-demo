@@ -20,6 +20,7 @@ export default {
 <style>
 html,
 body {
+  height: 100%;
   min-height: 100vh;
   margin: 0;
   background-color: #eceef3;
@@ -27,6 +28,7 @@ body {
 
 .wrapper {
   position: relative;
+  height: 100%;
 }
 </style>
 

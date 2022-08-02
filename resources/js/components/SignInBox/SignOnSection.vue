@@ -2,7 +2,7 @@
   <div class="sign-in-box__inner">
     <div class="sign-in-box__top-actions">
       <a href="#" draggable="false" @click="toLoginPage">
-        <span>Sign On</span>
+        <span>Sign In</span>
       </a>
     </div>
 

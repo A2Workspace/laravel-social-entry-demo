@@ -1,6 +1,6 @@
 <template>
   <div class="login-page">
-    <div class="sign-in-box__pos">
+    <div class="sign-in-box-pos">
       <SignInBox />
     </div>
   </div>
@@ -15,7 +15,11 @@ export default {
 </script>
 
 <style scoped>
-.sign-in-box__pos {
+.login-page {
+  height: 100%;
+}
+
+.sign-in-box-pos {
   padding: 15vh 0 0;
 }
 </style>

@@ -24,9 +24,9 @@ export default {
 
   provide() {
     return {
-      toLoginPage: () => this.status = 'sign_in',
-      toRegisterPage: () => this.status = 'sign_on',
-    }
+      toLoginPage: () => (this.status = 'sign_in'),
+      toRegisterPage: () => (this.status = 'sign_on'),
+    };
   },
 
   methods: {},
@@ -42,7 +42,7 @@ export default {
           provider: response.data.provider,
           username: response.data.social_email,
           nickname: response.data.social_name,
-        }
+        };
         // window.alert('該帳號尚未註冊');
 
         return;
