@@ -119,7 +119,7 @@ function makeInputId() {
 
 .section-form-item__input:disabled {
   color: #aaa;
-  cursor: progress;
+  cursor: not-allowed;
 }
 
 .section-form-item__error-message {

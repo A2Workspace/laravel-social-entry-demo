@@ -39,6 +39,7 @@ export default {
         this.status = 'sign_on';
 
         this.defaultFormData = {
+          provider: response.data.provider,
           username: response.data.social_email,
           nickname: response.data.social_name,
         }

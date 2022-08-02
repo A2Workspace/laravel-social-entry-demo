@@ -27,8 +27,7 @@
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    min-height: 520px;
-    padding: 40px 30px 30px;
+    padding: 40px 30px 40px;
 }
 
 .sign-in-box__form.--shaking {
@@ -105,7 +104,7 @@
 ** ========================================================================== */
 
 .sign-in-box__social-entry {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .sign-in-box__social-entry-text {

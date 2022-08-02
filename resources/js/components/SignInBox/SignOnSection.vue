@@ -7,11 +7,21 @@
     </div>
 
     <div class="sign-in-box__contain">
-      <SectionHeader></SectionHeader>
+      <SectionHeader small>Social Entry</SectionHeader>
+
+      <SocialConnectingHeader :service="socialProvider" v-show="socialProvider" />
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
       <form class="sign-in-box__form" ref="form" :class="{ '--shaking': errorMessage }" @submit.prevent="handleSignOn">
+        <SectionFormItem
+          type="text"
+          :label="socialIdentifierLabel"
+          disabled
+          :value="socialIdentifier"
+          v-if="socialIdentifier"
+        />
+
         <SectionFormItem
           type="text"
           label="Username"
@@ -51,15 +61,17 @@ import axios from 'axios';
 import SectionButton from './SectionButton';
 import SectionFormItem from './SectionFormItem';
 import SectionHeader from './SectionHeader';
+import SocialConnectingHeader from './SocialConnectingHeader';
 
 export default {
   components: {
     SectionButton,
     SectionFormItem,
     SectionHeader,
+    SocialConnectingHeader,
   },
 
-  inject: ['toLoginPage'],
+  inject: ['$socialEntry', 'toLoginPage'],
 
   props: {
     formData: {
@@ -158,6 +170,31 @@ export default {
     isProcessing() {
       return Boolean(this.processing);
     },
+
+    lastAccessTokenResponse() {
+      return this.$socialEntry.getLastAccessTokenResponse();
+    },
+
+    isConnecting() {
+      return Boolean(this.lastAccessTokenResponse);
+    },
+
+    socialProvider() {
+      return this.lastAccessTokenResponse?.data?.provider;
+    },
+
+    socialIdentifier() {
+      return this.lastAccessTokenResponse?.data?.identifier;
+    },
+
+    socialIdentifierLabel() {
+      let provider = this.socialProvider;
+
+      if (provider) {
+        return provider.charAt(0).toUpperCase() + provider.substr(1) + ' ID';
+      }
+    },
   },
 };
 </script>
+

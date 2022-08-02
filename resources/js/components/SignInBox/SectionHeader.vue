@@ -1,5 +1,5 @@
 <template>
-  <div class="section-header">
+  <div class="section-header" :class="className">
     <h2 class="section-header__text">
       <a :href="homePage" draggable="false">
         <slot>{{ text }}</slot>
@@ -16,11 +16,24 @@ export default {
     text: {
       default: 'Social Entry',
     },
+    small: {
+      default: false,
+    },
   },
 
   computed: {
     homePage() {
       return window.location.origin;
+    },
+
+    className() {
+      if (this.small === '' || this.small !== false) {
+        return {
+          '--small': true,
+        };
+      }
+
+      return {};
     },
   },
 };
@@ -30,6 +43,10 @@ export default {
 .section-header {
   margin-bottom: 42px;
   user-select: none;
+}
+
+.section-header.--small .section-header__text {
+  font-size: 1.3em;
 }
 
 .section-header__text {

@@ -28,8 +28,8 @@ export default {
       authorize: this.authorize,
       completeAuthorization: this.completeAuthorization,
       loginWithToken: this.loginWithToken,
-      accessToken: () => this.socialEntryState.accessToken,
-      lastAccessTokenResponse: () => this.socialEntryState.lastAccessTokenResponse,
+      getAccessToken: () => this.socialEntryState.accessToken,
+      getLastAccessTokenResponse: () => this.socialEntryState.lastAccessTokenResponse,
     };
 
     return { $socialEntry };
@@ -83,7 +83,7 @@ export default {
         data: { code },
       });
 
-      request = request.then((response) => {
+      let responsed = request.then((response) => {
         this.socialEntryState.lastAccessTokenResponse = response;
 
         return response;
@@ -105,7 +105,7 @@ export default {
 
       this.socialEntryState.processing = request;
 
-      return request;
+      return responsed;
     },
 
     /**

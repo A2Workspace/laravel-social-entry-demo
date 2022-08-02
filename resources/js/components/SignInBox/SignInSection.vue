@@ -9,7 +9,7 @@
     </div>
 
     <div class="sign-in-box__contain">
-      <SectionHeader></SectionHeader>
+      <SectionHeader>Social Entry</SectionHeader>
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
@@ -152,3 +152,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.sign-in-box__inner {
+  min-height: 520px;
+}
+</style>
