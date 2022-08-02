@@ -9,7 +9,7 @@
     <div class="sign-in-box__contain">
       <SectionHeader small>Social Entry</SectionHeader>
 
-      <SocialConnectingHeader :service="socialProvider" v-show="socialProvider" />
+      <SocialConnectingHeader :service="socialProvider" :userAvatar="socialAvatar" v-show="socialProvider" />
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
@@ -181,6 +181,10 @@ export default {
 
     socialProvider() {
       return this.lastAccessTokenResponse?.data?.provider;
+    },
+
+    socialAvatar() {
+      return this.lastAccessTokenResponse?.data?.social_avatar;
     },
 
     socialIdentifier() {

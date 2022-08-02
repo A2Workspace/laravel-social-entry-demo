@@ -7,17 +7,33 @@
         </div>
       </i>
     </div>
+
+    <div class="connecting-icon" ref="connectingIcon" v-if="userAvatar">
+      <i class="connecting-icon__dot" />
+      <i class="connecting-icon__dot" />
+      <i class="connecting-icon__dot" />
+      <i class="connecting-icon__dot" />
+      <i class="connecting-icon__dot" />
+    </div>
+
+    <div class="social-connecting-header__user-avatar" v-if="userAvatar">
+      <img :src="userAvatar" />
+    </div>
   </div>
 </template>
 
 <script>
+let played = false;
+
 export default {
   inheritAttrs: false,
 
   props: {
     service: {
       default: null,
-      // require: true,
+    },
+    userAvatar: {
+      default: null,
     },
   },
 
@@ -47,6 +63,13 @@ export default {
       }
     },
   },
+
+  mounted() {
+    if (!played) {
+      played = true;
+      this.$el.classList.add('--play');
+    }
+  },
 };
 </script>
 
@@ -55,6 +78,7 @@ export default {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
+  align-items: center;
 
   margin-bottom: 40px;
 }
@@ -92,5 +116,105 @@ export default {
   color: #fff;
   text-align: center;
   font-size: 16px;
+}
+
+.connecting-icon {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  width: 64px;
+
+  margin: 0 18px;
+}
+
+.connecting-icon__dot {
+  display: block;
+  width: 5px;
+  height: 5px;
+  background-color: #839192;
+  border-radius: 50%;
+
+  animation-name: connecting-animation;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
+}
+
+.--play .connecting-icon__dot {
+  animation-play-state: running;
+  background-color: #eaeded;
+}
+
+.connecting-icon__dot:nth-child(1) {
+  animation-delay: 300ms;
+}
+
+.connecting-icon__dot:nth-child(2) {
+  animation-delay: 900ms;
+}
+
+.connecting-icon__dot:nth-child(3) {
+  animation-delay: 1500ms;
+}
+
+.connecting-icon__dot:nth-child(4) {
+  animation-delay: 2100ms;
+}
+
+.connecting-icon__dot:nth-child(5) {
+  animation-delay: 2700ms;
+}
+
+.connecting-icon + .social-connecting-header__user-avatar {
+  margin-left: -2px;
+}
+
+@keyframes connecting-animation {
+  0% {
+    background-color: #eaeded;
+  }
+  100% {
+    background-color: #839192;
+  }
+}
+
+.social-connecting-header__user-avatar {
+  overflow: hidden;
+
+  width: var(--social-connecting-header-size, 72px);
+  height: var(--social-connecting-header-size, 72px);
+
+  border-radius: 50%;
+  border: 2px solid #85929e;
+
+  animation-name: connecting-animation2;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-delay: 3000ms;
+  animation-play-state: paused;
+}
+
+.--play .social-connecting-header__user-avatar {
+  opacity: 0.6;
+  border-color: #d6dbdf;
+  animation-play-state: running;
+}
+
+.social-connecting-header__user-avatar img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes connecting-animation2 {
+  0% {
+    border-color: #d6dbdf;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    border-color: #85929e;
+  }
 }
 </style>
