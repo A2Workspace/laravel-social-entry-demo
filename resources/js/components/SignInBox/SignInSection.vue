@@ -94,7 +94,7 @@ export default {
     },
 
     validateFormInputs() {
-      if (this.form.username == '') {
+      if (!this.form.username) {
         setTimeout(() => {
           this.$refs.form.querySelector('[name="username"]').focus();
         });
@@ -102,7 +102,7 @@ export default {
         return false;
       }
 
-      if (this.form.password == '') {
+      if (!this.form.password) {
         setTimeout(() => {
           this.$refs.form.querySelector('[name="password"]').focus();
         });
