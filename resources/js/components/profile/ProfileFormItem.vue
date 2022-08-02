@@ -1,10 +1,10 @@
 <template>
-  <div class="section-form-item">
-    <div class="section-form-item__inner">
-      <input class="section-form-item__input" v-bind="$attrs" v-model="inputValue" placeholder=" " :id="inputId" />
-      <label class="section-form-item__label" :for="inputId">{{ label }}</label>
+  <div class="profile-form-item">
+    <div class="profile-form-item__inner">
+      <input class="profile-form-item__input" v-bind="$attrs" v-model="inputValue" />
+      <label class="profile-form-item__label" :for="inputId">{{ label }}</label>
     </div>
-    <p class="section-form-item__error-message" v-show="parsedErrorMessage">{{ parsedErrorMessage }}</p>
+    <p class="profile-form-item__error-message" v-show="parsedErrorMessage">{{ parsedErrorMessage }}</p>
   </div>
 </template>
 
@@ -67,62 +67,65 @@ function makeInputId() {
 </script>
 
 <style scoped>
-.section-form-item {
+.profile-form-item {
+  --profile-form-item-color: #9fa3ab;
+  --profile-form-item-color2: #555e77;
+
   display: block;
-  margin: 20px 0;
+  margin: 10px 0 24px;
+  padding: 8px 0 6px;
   font-size: 14px;
 }
 
-.section-form-item__inner {
+.profile-form-item__inner {
   position: relative;
 }
 
-.section-form-item__label {
+.profile-form-item__label {
   position: absolute;
-  top: 10px;
-  left: 8px;
+  top: -8px;
+  left: 11px;
   box-sizing: border-box;
-  padding: 6px 7px 3px;
-  color: #888;
-  font-size: 1em;
+  padding: 3px 8px;
+  background-color: #fff;
+
+  border-radius: 3px;
+  color: var(--profile-form-item-color);
+  font-size: 0.8em;
   line-height: 1;
+  text-transform: uppercase;
 
   cursor: text;
   user-select: none;
   transition: 150ms ease-in;
 }
 
-.section-form-item__input:focus + .section-form-item__label,
-.section-form-item__input:not(:placeholder-shown).section-form-item__input:not(:focus) + .section-form-item__label {
-  top: -11px;
-  left: 7px;
-  font-size: 0.85em;
-  background-color: var(--sign-in-box-bg-color, #fff);
+.profile-form-item__input:focus + .profile-form-item__label {
+  color: var(--profile-form-item-color2);
 }
 
-.section-form-item__input {
+.profile-form-item__input {
   box-sizing: border-box;
-
   width: 100%;
   height: 100%;
-  padding: 15px 14px 12px;
+  padding: 15px 14px 11px;
   background-color: #fff;
-  border: 1px solid #dcdfe6;
+  border: 1px solid var(--profile-form-item-color);
   border-radius: 2px;
-
   outline: 0;
+  color: #222;
 }
 
-.section-form-item__input:focus {
-  border: 1px solid #7984a0;
+.profile-form-item__input:focus {
+  border: 1px solid var(--profile-form-item-color2);
 }
 
-.section-form-item__input:disabled {
+.profile-form-item__input:disabled {
   color: #aaa;
   cursor: not-allowed;
 }
 
-.section-form-item__error-message {
+.profile-form-item__error-message {
   margin: 0;
   margin-top: 0.7em;
   padding-left: 1px;
