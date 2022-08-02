@@ -18,6 +18,8 @@ class RegisterController extends Controller
     {
         $inputs = $this->validateRequest($request);
 
+        $inputs['password'] = bcrypt($inputs['password']);
+
         $newRecord = User::create($inputs);
 
         return new UserResource($newRecord);
@@ -38,7 +40,7 @@ class RegisterController extends Controller
     protected function rules(): array
     {
         return [
-            'username' => 'required|min:3|max:50|unique:users',
+            'username' => 'required|alpha_dash|min:3|max:50|unique:users',
             'nickname' => 'nullable|min:3|max:50',
             'password' => Password::min(6),
         ];

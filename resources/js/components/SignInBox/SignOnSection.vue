@@ -138,8 +138,8 @@ export default {
       let request = axios.post('/api/register', this.form);
 
       request = request.then((response) => {
-        window.alert(`New user created`);
-        window.location.reload('');
+        window.alert(`New account created`);
+        window.location.replace('/');
       });
 
       request = request.catch((error) => {
