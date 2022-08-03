@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper">
-    <!-- <ProfilePage v-if="loggedIn" /> -->
-    <ProfilePage v-if="1" />
+    <ProfilePage v-if="loggedIn" />
     <LoginPage v-else />
   </div>
 </template>

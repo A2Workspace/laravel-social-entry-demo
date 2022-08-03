@@ -2,8 +2,8 @@
   <div class="profile-page">
     <Card header="Profile">
       <CardDescs>
-        <CardDescsItem label="Nickname">GGinin</CardDescsItem>
-        <CardDescsItem label="Username">user001</CardDescsItem>
+        <CardDescsItem label="Username">{{ user.username }}</CardDescsItem>
+        <CardDescsItem label="Nickname">{{ user.display_name }}</CardDescsItem>
         <CardDescsSocialItem provider="github" />
         <CardDescsSocialItem provider="facebook" />
         <CardDescsSocialItem provider="google" />
@@ -42,7 +42,7 @@ export default {
 <style scoped>
 .profile-page {
   box-sizing: border-box;
-  padding-top: 15vh;
+  padding-top: 110px;
   height: 100%;
 }
 </style>

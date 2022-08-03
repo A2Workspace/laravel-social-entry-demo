@@ -77,9 +77,8 @@ export default {
       });
 
       const response = await request;
-      this.authState.token = response.data.access_token;
 
-      return await this.fetchUser(options);
+      return await this.setUserToken(response.data.access_token);
     },
 
     logout() {
@@ -123,11 +122,26 @@ export default {
     },
 
     async setUserToken(token) {
+      if (typeof token !== 'string' || token === '') {
+        throw new Error('Invalid Argument');
+      }
+
       this.authState.token = token;
+      window.sessionStorage.setItem('token', token);
 
       return await this.fetchUser();
     },
   },
+
+  async created() {
+    const token = window.sessionStorage.getItem('token');
+
+    if (token) {
+      this.authState.token = token;
+
+      await this.fetchUser();
+    }
+  }
 };
 
 function isAccessibility(value) {
