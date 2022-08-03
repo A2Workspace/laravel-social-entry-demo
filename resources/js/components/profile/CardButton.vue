@@ -1,13 +1,11 @@
 <template>
-  <button class="card-button">
+  <button class="card-button" v-on="$listeners">
     <slot>{{ text }}</slot>
   </button>
 </template>
 
 <script>
 export default {
-  inheritAttrs: false,
-
   props: {
     text: {
       default: 'Button',

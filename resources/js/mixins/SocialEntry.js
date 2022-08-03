@@ -28,6 +28,8 @@ export default {
       authorize: this.authorize,
       completeAuthorization: this.completeAuthorization,
       loginWithToken: this.loginWithToken,
+      connectWithToken: this.connectWithToken,
+      disconnect: this.disconnect,
       getAccessToken: () => this.socialEntryState.accessToken,
       getLastAccessTokenResponse: () => this.socialEntryState.lastAccessTokenResponse,
     };
@@ -56,10 +58,10 @@ export default {
       };
     },
 
-    completeAuthorization(code = null) {
-      code = code || getParam('code');
+    completeAuthorization(authCode = null) {
+      authCode = authCode || getParam('code');
 
-      if (!code) {
+      if (!authCode) {
         return new Promise(() => {});
       }
 
@@ -80,11 +82,14 @@ export default {
       let request = axios.request({
         method: 'POST',
         url: endpoint,
-        data: { code },
+        data: {
+          code: authCode,
+        },
       });
 
       let responsed = request.then((response) => {
         this.socialEntryState.lastAccessTokenResponse = response;
+        this.socialEntryState.accessToken = response.data.access_token;
 
         return response;
       });
@@ -108,14 +113,12 @@ export default {
       return responsed;
     },
 
-    /**
-     * @param {(AxiosResponse|null)} response
-     * @returns {Promise}
-     */
-    loginWithToken(response) {
-      response = response || this.socialEntryState.lastAccessTokenResponse;
+    // =========================================================================
+    // = Social Sign In
+    // =========================================================================
 
-      const accessToken = response.data.access_token;
+    loginWithToken(accessToken) {
+      accessToken = accessToken || this.socialEntryState.accessToken;
 
       let baseUrl = window.location.origin || 'http://localhost:8000';
       let endpoint = `${baseUrl}/auth/socialite/login`;
@@ -123,8 +126,49 @@ export default {
       let request = axios.request({
         method: 'POST',
         url: endpoint,
-        data: { access_token: accessToken },
+        data: {
+          access_token: accessToken,
+        },
       });
+
+      return request;
+    },
+
+    // =========================================================================
+    // = Connections
+    // =========================================================================
+
+    connectWithToken(accessToken) {
+      accessToken = accessToken || this.socialEntryState.accessToken;
+
+      let baseUrl = window.location.origin || 'http://localhost:8000';
+      let endpoint = `${baseUrl}/auth/socialite/connect`;
+
+      let request = axios.request({
+        method: 'POST',
+        url: endpoint,
+        data: {
+          access_token: accessToken,
+        },
+      });
+
+      return request;
+    },
+
+    disconnect(provider, identifier) {
+      let baseUrl = window.location.origin || 'http://localhost:8000';
+      let endpoint = `${baseUrl}/auth/socialite/disconnect`;
+
+      let request = axios.request({
+        method: 'POST',
+        url: endpoint,
+        data: {
+          type: provider,
+          identifier,
+        },
+      });
+
+      return request;
     },
   },
 };

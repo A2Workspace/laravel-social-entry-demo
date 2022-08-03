@@ -28,10 +28,10 @@ export default {
   components: { CardButton, CardDescsItem },
 
   props: {
+    value: {},
     provider: {
       require: true,
     },
-    value: {},
     emptyText: {
       default: '-----',
     },
@@ -40,6 +40,18 @@ export default {
     },
     disconnectionButtonText: {
       default: 'Disonnect',
+    },
+  },
+
+  inject: ['handleSocialConnection', 'handleSocialDisonnection'],
+
+  methods: {
+    handleConnection() {
+      this.handleSocialConnection(this.provider);
+    },
+
+    handleDisonnection() {
+      this.handleSocialDisonnection(this.provider, this.value);
     },
   },
 
@@ -52,15 +64,6 @@ export default {
 
     isEmpty() {
       return !this.value;
-    },
-  },
-
-  methods: {
-    handleConnection() {
-      //
-    },
-    handleDisonnection() {
-      //
     },
   },
 };

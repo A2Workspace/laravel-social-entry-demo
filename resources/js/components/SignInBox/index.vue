@@ -29,10 +29,6 @@ export default {
     };
   },
 
-  methods: {},
-
-  computed: {},
-
   mounted() {
     this.$socialEntry.completeAuthorization().then((response) => {
       if (response.data.new_user || response.data.local_user_id == null) {

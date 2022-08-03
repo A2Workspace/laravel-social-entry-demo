@@ -37,8 +37,8 @@ export default {
       login: this.login,
       loginWith: this.loginWith,
       loggout: this.loggout,
-      loggedIn: () => this.loggedIn,
-      user: () => this.user,
+      isLoggedIn: () => this.loggedIn,
+      getUser: () => this.user,
     };
 
     return { $auth };
@@ -104,11 +104,11 @@ export default {
       }
 
       const response = await axios.request({
-        method: 'GET',
-        url: `${options.url}/user`,
         headers: {
           Authorization: `Bearer ${options.token}`,
         },
+        method: 'GET',
+        url: `${options.url}/user`,
       });
 
       let userData = response.data;
@@ -136,12 +136,17 @@ export default {
   async created() {
     const token = window.sessionStorage.getItem('token');
 
+    // Retrieve the user data from stored token.
     if (token) {
       this.authState.token = token;
 
-      await this.fetchUser();
+      try {
+        await this.fetchUser();
+      } catch (error) {
+        window.sessionStorage.removeItem('token');
+      }
     }
-  }
+  },
 };
 
 function isAccessibility(value) {

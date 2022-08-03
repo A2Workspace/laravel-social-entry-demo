@@ -130,7 +130,7 @@ export default {
           throw error;
         }
 
-        this.errorMessage = error.response.data?.error || `Status Code: ${response.status}`;
+        this.errorMessage = error.response.data?.error || `Status Code: ${error.response.status}`;
       });
 
       request = request.finally(() => {
