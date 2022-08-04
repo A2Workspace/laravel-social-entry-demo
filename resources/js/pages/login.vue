@@ -53,8 +53,6 @@ export default {
     async completeSocialLogin() {
       const response = await this.$socialEntry.completeAuthorization().catch(() => {});
 
-      resetParams();
-
       if (response.data.new_user || response.data.local_user_id == null) {
         this.status = 'sign_on';
 
@@ -84,7 +82,11 @@ export default {
 };
 
 function resolveUsername(email) {
-  return email.slice(0, email.indexOf('@'))
+  if (!email) {
+    return '';
+  }
+
+  return email.slice(0, email.indexOf('@'));
 }
 </script>
 

@@ -87,7 +87,7 @@ export default {
   display: inline-block;
 
   box-sizing: border-box;
-  min-width: var(--social-connecting-header-size, 72px);
+  width: var(--social-connecting-header-size, 72px);
   height: var(--social-connecting-header-size, 72px);
   line-height: 1;
 
@@ -180,13 +180,10 @@ export default {
 }
 
 .social-connecting-header__user-avatar {
-  overflow: hidden;
+  position: relative;
 
   width: var(--social-connecting-header-size, 72px);
   height: var(--social-connecting-header-size, 72px);
-
-  border-radius: 50%;
-  border: 2px solid #85929e;
 
   animation-name: connecting-animation2;
   animation-duration: 0.5s;
@@ -195,17 +192,35 @@ export default {
   animation-play-state: paused;
 }
 
-/* TODO: 修復動畫播放完畢後圖片會跳動 */
+.social-connecting-header__user-avatar::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: 1;
+  border-radius: 50%;
+
+  border: 3px solid #85929e;
+}
+
 .--play .social-connecting-header__user-avatar {
   opacity: 0.6;
-  border-color: #d6dbdf;
   animation-play-state: running;
 }
 
+.--play .social-connecting-header__user-avatar::after {
+  border-color: #85929e;
+}
+
 .social-connecting-header__user-avatar img {
+  overflow: hidden;
   object-fit: contain;
   width: 100%;
   height: 100%;
+  border-radius: 50%;
 }
 
 @keyframes connecting-animation2 {
