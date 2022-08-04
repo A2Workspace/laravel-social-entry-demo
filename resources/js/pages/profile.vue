@@ -52,6 +52,10 @@ export default {
     async completeSocialConnection() {
       const response = await this.$socialEntry.completeAuthorization().catch(() => {});
 
+      if (!response) {
+        return false;
+      }
+
       if (!response.data.new_user || response.data.local_user_id !== null) {
         window.alert('The social account is already connected to a different user');
 

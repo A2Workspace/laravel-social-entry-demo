@@ -53,6 +53,10 @@ export default {
     async completeSocialLogin() {
       const response = await this.$socialEntry.completeAuthorization().catch(() => {});
 
+      if (!response) {
+        return false;
+      }
+
       if (response.data.new_user || response.data.local_user_id == null) {
         this.status = 'sign_on';
 
