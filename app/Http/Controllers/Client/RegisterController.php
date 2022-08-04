@@ -8,14 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 use A2Workspace\SocialEntry\SocialEntry;
 use A2Workspace\SocialEntry\AccessTokenPayload;
-use A2Workspace\SocialEntry\Concerns\ValidatesUserModels;
 use A2Workspace\SocialEntry\Http\Requests\AccessTokenRequest;
 use A2Workspace\SocialEntry\Http\Controllers\AbstractGrantController;
 
 class RegisterController extends AbstractGrantController
 {
-    use ValidatesUserModels;
-
     /**
      * @param \Illuminate\Http\Request $request
      * @param \Illuminate\Http\Response
@@ -76,8 +73,6 @@ class RegisterController extends AbstractGrantController
      */
     protected function completeRequestFromToken(Request $request, AccessTokenPayload $accessTokenPayload)
     {
-        $this->assertValidUserAuthorized($request);
-
         $isAlreadyConnected = SocialEntry::identifiers()->exists(
             $accessTokenPayload->identifier,
             $accessTokenPayload->provider,

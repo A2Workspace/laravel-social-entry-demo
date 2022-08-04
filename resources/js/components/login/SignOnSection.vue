@@ -144,7 +144,7 @@ export default {
       const formData = { ...this.form };
 
       if (this.accessToken) {
-        formData.accessToken = this.accessToken;
+        formData['access_token'] = this.accessToken;
       }
 
       let request = axios.post('/api/register', formData);
