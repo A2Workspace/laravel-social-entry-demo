@@ -195,6 +195,7 @@ export default {
   animation-play-state: paused;
 }
 
+/* TODO: 修復動畫播放完畢後圖片會跳動 */
 .--play .social-connecting-header__user-avatar {
   opacity: 0.6;
   border-color: #d6dbdf;

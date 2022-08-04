@@ -38,6 +38,7 @@ export default {
       login: this.login,
       loginWith: this.loginWith,
       logout: this.logout,
+      setUserToken: this.setUserToken,
       isLoggedIn: () => this.loggedIn,
       getUser: () => this.user,
     };

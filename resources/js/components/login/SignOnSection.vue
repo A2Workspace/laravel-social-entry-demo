@@ -58,10 +58,10 @@
 
 <script>
 import axios from 'axios';
-import SectionButton from './SectionButton';
-import SectionFormItem from './SectionFormItem';
-import SectionHeader from './SectionHeader';
-import SocialConnectingHeader from './SocialConnectingHeader';
+import SectionButton from './pures/SectionButton';
+import SectionFormItem from './pures/SectionFormItem';
+import SectionHeader from './pures/SectionHeader';
+import SocialConnectingHeader from './pures/SocialConnectingHeader';
 
 export default {
   components: {

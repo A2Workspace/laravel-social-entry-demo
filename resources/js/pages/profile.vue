@@ -50,7 +50,7 @@ export default {
     },
 
     async completeSocialConnection() {
-      const response = await this.$socialEntry.completeAuthorization();
+      const response = await this.$socialEntry.completeAuthorization().catch(() => {});
 
       if (!response.data.new_user || response.data.local_user_id !== null) {
         window.alert('The social account is already connected to a different user');
@@ -63,7 +63,7 @@ export default {
       await this.$socialEntry.connectWithToken(response.data.access_token);
 
       let provider = response.data.provider;
-      provider = String(this.provider).toLowerCase();
+      provider = String(provider).toLowerCase();
       provider = provider.charAt(0).toUpperCase() + provider.substr(1);
 
       window.alert(`The ${provider} account is connected`);
@@ -78,6 +78,7 @@ export default {
 
     async handleLogout() {
       this.$auth.logout();
+
       window.location.replace('/');
     },
   },

@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  inject: ['$socialEntry'],
+  inject: ['handleSocialLogin', 'getSocialLoginRedirectUrl'],
 
   props: {
     provider: {
@@ -16,13 +16,13 @@ export default {
 
   methods: {
     handleAuthorization() {
-      this.$socialEntry.authorize(this.provider).redirect();
+      this.handleSocialLogin(this.provider);
     },
   },
 
   computed: {
     targetUrl() {
-      this.$socialEntry.authorize(this.provider).getTargetUrl();
+      return this.getSocialLoginRedirectUrl(this.provider);
     },
 
     iconClassName() {

@@ -50,10 +50,10 @@
 </template>
 
 <script>
-import SectionButton from './SectionButton';
-import SectionFormItem from './SectionFormItem';
-import SectionHeader from './SectionHeader';
-import SocialEntry from './SocialEntry';
+import SectionButton from './pures/SectionButton';
+import SectionFormItem from './pures/SectionFormItem';
+import SectionHeader from './pures/SectionHeader';
+import SocialEntry from './pures/SocialEntry';
 
 export default {
   components: {
