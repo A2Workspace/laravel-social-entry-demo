@@ -2,7 +2,7 @@
   <div class="login-page">
     <div class="sign-in-box-pos">
       <SignInBox>
-        <SignOnSection v-if="'sign_on' === status" :formData="defaultFormData" />
+        <SignOnSection v-if="'sign_on' === status" :options="registerOptions" />
         <SignInSection v-else />
       </SignInBox>
     </div>
@@ -28,6 +28,7 @@ export default {
     return {
       status: 'sign_in',
       defaultFormData: null,
+      registerOptions: {},
     };
   },
 
@@ -57,10 +58,15 @@ export default {
       if (response.data.new_user || response.data.local_user_id == null) {
         this.status = 'sign_on';
 
-        this.defaultFormData = {
-          provider: response.data.provider,
-          username: response.data.social_email,
-          nickname: response.data.social_name,
+        this.registerOptions = {
+          form: {
+            username: response.data.social_email,
+            nickname: response.data.social_name,
+          },
+          socialProvider: response.data.provider,
+          socialAvatar: response.data.social_avatar,
+          socialIdentifier: response.data.identifier,
+          accessToken: response.data.access_token,
         };
 
         return true;

@@ -74,9 +74,15 @@ export default {
   inject: ['$socialEntry', 'toLoginPage'],
 
   props: {
-    formData: {
+    options: {
       type: Object,
-      default: () => ({}),
+      default: () => ({
+        form: {},
+        socialProvider: null,
+        socialAvatar: null,
+        socialIdentifier: null,
+        accessToken: null,
+      }),
     },
   },
 
@@ -89,7 +95,7 @@ export default {
         username: '',
         nickname: '',
         password: '',
-        ...this.formData,
+        ...this.options.form,
       },
     };
   },
@@ -135,7 +141,13 @@ export default {
         return;
       }
 
-      let request = axios.post('/api/register', this.form);
+      const formData = { ...this.form };
+
+      if (this.accessToken) {
+        formData.accessToken = this.accessToken;
+      }
+
+      let request = axios.post('/api/register', formData);
 
       request = request.then((response) => {
         window.alert(`New account created`);
@@ -171,24 +183,20 @@ export default {
       return Boolean(this.processing);
     },
 
-    lastAccessTokenResponse() {
-      return this.$socialEntry.getLastAccessTokenResponse();
-    },
-
-    isConnecting() {
-      return Boolean(this.lastAccessTokenResponse);
+    accessToken() {
+      return this.options.accessToken;
     },
 
     socialProvider() {
-      return this.lastAccessTokenResponse?.data?.provider;
+      return this.options.socialProvider;
     },
 
     socialAvatar() {
-      return this.lastAccessTokenResponse?.data?.social_avatar;
+      return this.options.socialAvatar;
     },
 
     socialIdentifier() {
-      return this.lastAccessTokenResponse?.data?.identifier;
+      return this.options.socialIdentifier;
     },
 
     socialIdentifierLabel() {
