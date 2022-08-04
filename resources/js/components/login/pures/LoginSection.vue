@@ -1,15 +1,11 @@
 <template>
   <div class="sign-in-box__inner">
     <div class="sign-in-box__top-actions">
-      <span></span>
-      <a href="#" draggable="false" @click="toRegisterPage">
-        <span>Register</span>
-        <i class="fas fa-external-link" />
-      </a>
+      <slot name="actions"></slot>
     </div>
 
     <div class="sign-in-box__contain">
-      <SectionHeader>Social Entry</SectionHeader>
+      <SectionHeader>{{ headerText }}</SectionHeader>
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
@@ -50,10 +46,10 @@
 </template>
 
 <script>
-import SectionButton from './pures/SectionButton';
-import SectionFormItem from './pures/SectionFormItem';
-import SectionHeader from './pures/SectionHeader';
-import SocialEntry from './pures/SocialEntry';
+import SectionButton from './SectionButton';
+import SectionFormItem from './SectionFormItem';
+import SectionHeader from './SectionHeader';
+import SocialEntry from './SocialEntry';
 
 export default {
   components: {
@@ -61,6 +57,12 @@ export default {
     SectionFormItem,
     SectionHeader,
     SocialEntry,
+  },
+
+  props: {
+    headerText: {
+      default: 'Social Entry',
+    },
   },
 
   inject: {

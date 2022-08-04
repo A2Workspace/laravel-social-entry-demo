@@ -1,13 +1,11 @@
 <template>
   <div class="sign-in-box__inner">
     <div class="sign-in-box__top-actions">
-      <a href="#" draggable="false" @click="toLoginPage">
-        <span>Sign In</span>
-      </a>
+      <slot name="actions"></slot>
     </div>
 
     <div class="sign-in-box__contain">
-      <SectionHeader small>Social Entry</SectionHeader>
+      <SectionHeader small>{{ headerText }}</SectionHeader>
 
       <SocialConnectingHeader :service="socialProvider" :userAvatar="socialAvatar" v-show="socialProvider" />
 
@@ -62,10 +60,10 @@
 </template>
 
 <script>
-import SectionButton from './pures/SectionButton';
-import SectionFormItem from './pures/SectionFormItem';
-import SectionHeader from './pures/SectionHeader';
-import SocialConnectingHeader from './pures/SocialConnectingHeader';
+import SectionButton from './SectionButton';
+import SectionFormItem from './SectionFormItem';
+import SectionHeader from './SectionHeader';
+import SocialConnectingHeader from './SocialConnectingHeader';
 
 export default {
   components: {
@@ -75,12 +73,10 @@ export default {
     SocialConnectingHeader,
   },
 
-  inject: {
-    doHandleRegister: 'handleRegister',
-    toLoginPage: 'toLoginPage',
-  },
-
   props: {
+    headerText: {
+      default: 'Social Entry',
+    },
     options: {
       type: Object,
       default: () => ({
@@ -91,6 +87,11 @@ export default {
         accessToken: null,
       }),
     },
+  },
+
+  inject: {
+    doHandleRegister: 'handleRegister',
+    toLoginPage: 'toLoginPage',
   },
 
   data() {
