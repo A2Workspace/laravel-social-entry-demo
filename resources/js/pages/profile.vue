@@ -1,13 +1,20 @@
 <template>
   <div class="profile-page">
     <Card header="Profile">
+      <template #actions>
+        <a href="#" draggable="false" @click="handleLogout">
+          <span>Logout</span>
+          <i class="fas fa-sign-out-alt" />
+        </a>
+      </template>
+
       <CardDescs>
         <CardDescsItem label="Username">{{ user.username }}</CardDescsItem>
         <CardDescsItem label="Nickname">{{ user.display_name }}</CardDescsItem>
-        <CardDescsSocialite provider="github" />
-        <CardDescsSocialite provider="facebook" />
-        <CardDescsSocialite provider="google" />
-        <CardDescsSocialite provider="line" />
+        <CardDescsSocialite provider="github" :value="user.github_id" />
+        <CardDescsSocialite provider="facebook" :value="user.facebook_id" />
+        <CardDescsSocialite provider="google" :value="user.google_id" />
+        <CardDescsSocialite provider="line" :value="user.line_id" />
       </CardDescs>
     </Card>
   </div>
@@ -55,13 +62,22 @@ export default {
 
       await this.$socialEntry.connectWithToken(response.data.access_token);
 
-      window.alert(`The ${response.data.provider} account is connected`);
+      let provider = response.data.provider;
+      provider = String(this.provider).toLowerCase();
+      provider = provider.charAt(0).toUpperCase() + provider.substr(1);
+
+      window.alert(`The ${provider} account is connected`);
       window.location.replace('/');
     },
 
     async handleSocialDisonnection(provider, identifier) {
       await this.$socialEntry.disconnect(provider, identifier);
 
+      window.location.replace('/');
+    },
+
+    async handleLogout() {
+      this.$auth.logout();
       window.location.replace('/');
     },
   },

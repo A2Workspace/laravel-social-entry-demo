@@ -37,7 +37,7 @@ export default {
     const $auth = {
       login: this.login,
       loginWith: this.loginWith,
-      loggout: this.loggout,
+      logout: this.logout,
       isLoggedIn: () => this.loggedIn,
       getUser: () => this.user,
     };
@@ -85,6 +85,9 @@ export default {
     logout() {
       this.authState.user = null;
       this.authState.token = null;
+
+      axios.defaults.headers.common['Authorization'] = null;
+      window.sessionStorage.removeItem('token');
 
       return Promise.resolve(true);
     },

@@ -57,9 +57,12 @@ export default {
 
   computed: {
     label() {
-      const provider = String(this.provider).toLowerCase();
+      let { provider } = this;
 
-      return provider.charAt(0).toUpperCase() + provider.substr(1) + ' Account';
+      provider = String(this.provider).toLowerCase();
+      provider = provider.charAt(0).toUpperCase() + provider.substr(1);
+
+      return `${provider} Account`;
     },
 
     isEmpty() {

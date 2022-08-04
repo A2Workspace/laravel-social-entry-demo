@@ -1,5 +1,9 @@
 <template>
   <div class="card">
+    <div class="card__top-actions">
+      <slot name="actions"></slot>
+    </div>
+
     <div class="card__inner">
       <slot name="header">
         <h2 class="card-header">{{ header }}</h2>
@@ -19,7 +23,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .card {
   overflow: hidden;
   position: relative;
@@ -31,6 +35,32 @@ export default {
   border: 1px solid #efefef;
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.card a:not(.classic) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card a:not(.classic):hover {
+  opacity: 0.8;
+}
+
+.card__top-actions {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 100;
+
+  padding: 10px 10px 0;
+
+  color: #555;
+  font-size: 14px;
+  line-height: 1;
 }
 
 .card__inner {

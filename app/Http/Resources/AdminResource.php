@@ -6,6 +6,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class AdminResource extends JsonResource
 {
+    use Concerns\HasSocialAccounts;
+
     /**
      * Transform the resource into an array.
      *
@@ -18,6 +20,7 @@ class AdminResource extends JsonResource
             'username' => $this->username,
             'display_name' => $this->display_name,
             'is_enabled' => $this->is_enabled,
+            $this->mergeSocialAccounts(true),
         ];
     }
 }

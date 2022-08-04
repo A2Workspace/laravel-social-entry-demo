@@ -22,7 +22,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .card-descs-item {
   margin: 20px 0 30px;
 }
