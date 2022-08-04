@@ -2,8 +2,8 @@
   <div class="login-page">
     <div class="sign-in-box-pos">
       <SignInBox>
-        <SignOnSection v-if="'sign_on' === status" :options="registerOptions" />
-        <SignInSection v-else />
+        <RegisterSection v-if="'sign_on' === status" :options="registerOptions" />
+        <LoginSection v-else />
       </SignInBox>
     </div>
   </div>
@@ -11,15 +11,15 @@
 
 <script>
 import SignInBox from '../components/login/SignInBox';
-import SignInSection from '../components/login/SignInSection';
-import SignOnSection from '../components/login/SignOnSection';
+import LoginSection from '../components/login/LoginSection';
+import RegisterSection from '../components/login/RegisterSection';
 import { resetParams } from '../mixins/SocialEntry';
 
 export default {
   components: {
     SignInBox,
-    SignInSection,
-    SignOnSection,
+    LoginSection,
+    RegisterSection,
   },
 
   inject: ['$auth', '$socialEntry'],
@@ -60,7 +60,7 @@ export default {
 
         this.registerOptions = {
           form: {
-            username: response.data.social_email,
+            username: resolveUsername(response.data.social_email),
             nickname: response.data.social_name,
           },
           socialProvider: response.data.provider,
@@ -82,6 +82,10 @@ export default {
     await this.completeSocialLogin();
   },
 };
+
+function resolveUsername(email) {
+  return email.slice(0, email.indexOf('@'))
+}
 </script>
 
 <style scoped>
