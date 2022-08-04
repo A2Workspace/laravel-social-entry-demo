@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^7.4|^8.0",
         "a2workspace/laravel-jwt": "^2.1",
         "a2workspace/laravel-social-entry": "^1.0",
         "a2workspace/laravel-stubs": "^1.0",
@@ -18,7 +18,8 @@
         "laravel/tinker": "^2.5"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1"
+        "fakerphp/faker": "^1.9.1",
+        "protoqol/prequel": "^1.23"
     },
     "autoload": {
         "psr-4": {
@@ -39,7 +40,7 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+            "@php artisan setup"
         ]
     },
     "extra": {
