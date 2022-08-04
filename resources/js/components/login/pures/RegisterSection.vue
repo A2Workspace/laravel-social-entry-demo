@@ -1,5 +1,5 @@
 <template>
-  <div class="sign-in-box__inner">
+  <SignInBox>
     <div class="sign-in-box__top-actions">
       <slot name="actions"></slot>
     </div>
@@ -56,13 +56,14 @@
         <SectionButton :processing="isProcessing">Create Account</SectionButton>
       </form>
     </div>
-  </div>
+  </SignInBox>
 </template>
 
 <script>
 import SectionButton from './SectionButton';
 import SectionFormItem from './SectionFormItem';
 import SectionHeader from './SectionHeader';
+import SignInBox from './SignInBox';
 import SocialConnectingHeader from './SocialConnectingHeader';
 
 export default {
@@ -70,6 +71,7 @@ export default {
     SectionButton,
     SectionFormItem,
     SectionHeader,
+    SignInBox,
     SocialConnectingHeader,
   },
 
@@ -91,7 +93,6 @@ export default {
 
   inject: {
     doHandleRegister: 'handleRegister',
-    toLoginPage: 'toLoginPage',
   },
 
   data() {
@@ -204,6 +205,22 @@ export default {
 
       if (provider) {
         return provider.charAt(0).toUpperCase() + provider.substr(1) + ' ID';
+      }
+    },
+  },
+
+  watch: {
+    'options.form'(newestFormData) {
+      if (typeof newestFormData !== 'object') {
+        return;
+      }
+
+      if (this.form.username == '') {
+        this.form.username = newestFormData.username;
+      }
+
+      if (this.form.nickname == '') {
+        this.form.nickname = newestFormData.nickname;
       }
     },
   },

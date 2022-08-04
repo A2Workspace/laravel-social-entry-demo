@@ -4,6 +4,7 @@
       <ClientPane v-if="clientMode" />
       <AdminPane v-else />
     </div>
+    <button @click="clientMode = !clientMode">Switch Mode</button>
   </div>
 </template>
 

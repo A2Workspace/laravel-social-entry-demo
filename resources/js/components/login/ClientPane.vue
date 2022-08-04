@@ -1,35 +1,39 @@
 <template>
-  <SignInBox>
-    <RegisterSection v-if="'sign_on' === status" :options="registerOptions">
-      <template #actions>
-        <a href="#" draggable="false" @click="status = 'sign_in'">
-          <span>Sign In</span>
-        </a>
-      </template>
-    </RegisterSection>
+  <FlipCard ref="card" v-model="registerMode">
+    <template #front>
+      <LoginSection>
+        <template #actions>
+          <span></span>
+          <a href="#" draggable="false" @click="registerMode = true">
+            <span>Register</span>
+            <i class="fas fa-external-link" />
+          </a>
+        </template>
+      </LoginSection>
+    </template>
 
-    <LoginSection v-else>
-      <template #actions>
-        <span></span>
-        <a href="#" draggable="false" @click="status = 'sign_on'">
-          <span>Register</span>
-          <i class="fas fa-external-link" />
-        </a>
-      </template>
-    </LoginSection>
-  </SignInBox>
+    <template #back>
+      <RegisterSection :options="registerOptions">
+        <template #actions>
+          <a href="#" draggable="false" @click="registerMode = false">
+            <span>Sign In</span>
+          </a>
+        </template>
+      </RegisterSection>
+    </template>
+  </FlipCard>
 </template>
 
 <script>
 import axios from 'axios';
-import SignInBox from './pures/SignInBox';
+import FlipCard from './pures/FlipCard';
 import LoginSection from './pures/LoginSection';
 import RegisterSection from './pures/RegisterSection';
 import { resetParams } from '../../mixins/SocialEntry';
 
 export default {
   components: {
-    SignInBox,
+    FlipCard,
     LoginSection,
     RegisterSection,
   },
@@ -38,8 +42,7 @@ export default {
 
   data() {
     return {
-      status: 'sign_in',
-      defaultFormData: null,
+      registerMode: false,
       registerOptions: {},
     };
   },
@@ -80,7 +83,7 @@ export default {
       }
 
       if (response.data.new_user || response.data.local_user_id == null) {
-        this.status = 'sign_on';
+        this.registerMode = true;
 
         this.registerOptions = {
           form: {

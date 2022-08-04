@@ -1,5 +1,5 @@
 <template>
-  <div class="sign-in-box__inner">
+  <SignInBox>
     <div class="sign-in-box__top-actions">
       <slot name="actions"></slot>
     </div>
@@ -42,13 +42,14 @@
         </div>
       </div>
     </div>
-  </div>
+  </SignInBox>
 </template>
 
 <script>
 import SectionButton from './SectionButton';
 import SectionFormItem from './SectionFormItem';
 import SectionHeader from './SectionHeader';
+import SignInBox from './SignInBox';
 import SocialEntry from './SocialEntry';
 
 export default {
@@ -56,6 +57,7 @@ export default {
     SectionButton,
     SectionFormItem,
     SectionHeader,
+    SignInBox,
     SocialEntry,
   },
 
@@ -67,7 +69,6 @@ export default {
 
   inject: {
     doHandleLogin: 'handleLogin',
-    toRegisterPage: 'toRegisterPage',
   },
 
   data() {
