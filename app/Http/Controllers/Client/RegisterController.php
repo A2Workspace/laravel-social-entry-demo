@@ -4,34 +4,49 @@ namespace App\Http\Controllers\Client;
 
 use App\Models\User;
 use App\Http\Resources\UserResource;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
+use A2Workspace\SocialEntry\SocialEntry;
+use A2Workspace\SocialEntry\AccessTokenPayload;
+use A2Workspace\SocialEntry\Concerns\ValidatesUserModels;
+use A2Workspace\SocialEntry\Http\Requests\AccessTokenRequest;
+use A2Workspace\SocialEntry\Http\Controllers\AbstractGrantController;
 
-class RegisterController extends Controller
+class RegisterController extends AbstractGrantController
 {
+    use ValidatesUserModels;
+
     /**
      * @param \Illuminate\Http\Request $request
      * @param \Illuminate\Http\Response
      */
     public function __invoke(Request $request)
     {
-        $inputs = $this->validateRequest($request);
+        if ($request->has('access_token')) {
+            // Super calls, then jump to self::completeRequestFromToken()
+            return parent::__invoke(AccessTokenRequest::createFrom($request));
+        }
 
-        $inputs['password'] = bcrypt($inputs['password']);
+        $newUser = $this->createUserFromRequest($request);
 
-        $newRecord = User::create($inputs);
-
-        return new UserResource($newRecord);
+        return new UserResource($newUser);
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * Create a new user record from given form request.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \App\Models\User
      */
-    protected function validateRequest(Request $request)
+    protected function createUserFromRequest(Request $request): User
     {
-        return $this->validate($request, $this->rules(), $this->messages());
+        $inputs = $request->validate($this->rules(), $this->messages());
+
+        return User::create([
+            'username' => $inputs['username'],
+            'display_name' => $inputs['nickname'],
+            'password' => bcrypt($inputs['password']),
+        ]);
     }
 
     /**
@@ -40,7 +55,7 @@ class RegisterController extends Controller
     protected function rules(): array
     {
         return [
-            'username' => 'required|alpha_dash|min:3|max:50|unique:users',
+            'username' => 'bail|required|alpha_dash|min:3|max:200|unique:users',
             'nickname' => 'nullable|min:3|max:50',
             'password' => Password::min(6),
         ];
@@ -54,5 +69,35 @@ class RegisterController extends Controller
         return [
             // ...
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function completeRequestFromToken(Request $request, AccessTokenPayload $accessTokenPayload)
+    {
+        $this->assertValidUserAuthorized($request);
+
+        $isAlreadyConnected = SocialEntry::identifiers()->exists(
+            $accessTokenPayload->identifier,
+            $accessTokenPayload->provider,
+            $accessTokenPayload->local_user_type,
+        );
+
+        if ($isAlreadyConnected) {
+            abort(400, 'The social account is already connected to a different user');
+        }
+
+        $newUser = $this->createUserFromRequest($request);
+
+        $identifier = SocialEntry::identifiers()->newIdentifierFor(
+            $newUser,
+            $accessTokenPayload->identifier,
+            $accessTokenPayload->provider,
+        );
+
+        $identifier->save();
+
+        return new UserResource($newUser);
     }
 }
