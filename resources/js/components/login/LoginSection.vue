@@ -63,7 +63,10 @@ export default {
     SocialEntry,
   },
 
-  inject: ['$auth', 'toRegisterPage'],
+  inject: {
+    doHandleLogin: 'handleLogin',
+    toRegisterPage: 'toRegisterPage',
+  },
 
   data() {
     return {
@@ -85,7 +88,28 @@ export default {
         return;
       }
 
-      this.doHandleLogin();
+      if (this.processing) {
+        return;
+      }
+
+      this.processing = true;
+
+      const { username, password } = this.form;
+      const certificate = { username, password };
+
+      this.processing = this.doHandleLogin('user', certificate)
+        // Handling error message.
+        .catch((error) => {
+          if (!error.isAxiosError) {
+            throw error;
+          }
+
+          this.errorMessage = error.response.data?.error || `Status Code: ${error.response.status}`;
+        })
+        // Unlock
+        .finally(() => {
+          this.processing = null;
+        });
     },
 
     resetErrors() {
@@ -111,33 +135,6 @@ export default {
       }
 
       return true;
-    },
-
-    doHandleLogin() {
-      if (this.processing) {
-        return;
-      }
-
-      this.processing = true;
-
-      const { username, password } = this.form;
-      const certificate = { username, password };
-
-      let request = this.$auth.loginWith('user', certificate);
-
-      request = request.catch((error) => {
-        if (!error.isAxiosError) {
-          throw error;
-        }
-
-        this.errorMessage = error.response.data?.error || `Status Code: ${error.response.status}`;
-      });
-
-      request = request.finally(() => {
-        this.processing = null;
-      });
-
-      this.processing = request;
     },
   },
 

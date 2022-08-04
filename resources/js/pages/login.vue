@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import SignInBox from '../components/login/SignInBox';
 import LoginSection from '../components/login/LoginSection';
 import RegisterSection from '../components/login/RegisterSection';
@@ -34,6 +35,8 @@ export default {
 
   provide() {
     return {
+      handleLogin: this.handleLogin,
+      handleRegister: this.handleRegister,
       handleSocialLogin: this.handleSocialLogin,
       getSocialLoginRedirectUrl: this.getSocialLoginRedirectUrl,
       toLoginPage: () => (this.status = 'sign_in'),
@@ -42,6 +45,16 @@ export default {
   },
 
   methods: {
+    handleLogin(strategy, options) {
+      resetParams();
+
+      return this.$auth.loginWith(strategy, options);
+    },
+
+    handleRegister(formData) {
+      return axios.post('/api/register', formData);
+    },
+
     handleSocialLogin(provider) {
       this.$socialEntry.authorize(provider).redirect();
     },
@@ -75,6 +88,8 @@ export default {
       }
 
       const authResponse = await this.$socialEntry.loginWithToken(response.data.access_token);
+
+      resetParams();
 
       await this.$auth.setUserToken(authResponse.data.access_token);
     },

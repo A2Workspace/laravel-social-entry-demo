@@ -13,7 +13,12 @@
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
-      <form class="sign-in-box__form" ref="form" :class="{ '--shaking': errorMessage }" @submit.prevent="handleSignOn">
+      <form
+        class="sign-in-box__form"
+        ref="form"
+        :class="{ '--shaking': errorMessage }"
+        @submit.prevent="handleRegister"
+      >
         <SectionFormItem
           type="text"
           :label="socialIdentifierLabel"
@@ -57,7 +62,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import SectionButton from './pures/SectionButton';
 import SectionFormItem from './pures/SectionFormItem';
 import SectionHeader from './pures/SectionHeader';
@@ -71,7 +75,10 @@ export default {
     SocialConnectingHeader,
   },
 
-  inject: ['$socialEntry', 'toLoginPage'],
+  inject: {
+    doHandleRegister: 'handleRegister',
+    toLoginPage: 'toLoginPage',
+  },
 
   props: {
     options: {
@@ -101,14 +108,47 @@ export default {
   },
 
   methods: {
-    handleSignOn() {
+    handleRegister() {
       this.resetErrors();
 
       if (!this.validateFormInputs()) {
         return;
       }
 
-      this.doHandleSignOn();
+      if (this.processing) {
+        return;
+      }
+
+      const formData = { ...this.form };
+
+      if (this.accessToken) {
+        formData['access_token'] = this.accessToken;
+      }
+
+      this.processing = this.doHandleRegister(formData)
+        // Handling successfully.
+        .then((response) => {
+          window.alert(`New account created`);
+          window.location.replace('/');
+        })
+        // Handling error message.
+        .catch((error) => {
+          if (!error.isAxiosError) {
+            throw error;
+          }
+
+          const { response } = error;
+
+          this.errorMessage = response.data.message || `Status Code: ${response.status}`;
+
+          if (response.status === 422 && typeof response.data.errors === 'object') {
+            this.errors = response.data.errors;
+          }
+        })
+        // Unlock
+        .finally(() => {
+          this.processing = null;
+        });
     },
 
     resetErrors() {
@@ -134,47 +174,6 @@ export default {
       }
 
       return true;
-    },
-
-    doHandleSignOn() {
-      if (this.processing) {
-        return;
-      }
-
-      const formData = { ...this.form };
-
-      if (this.accessToken) {
-        formData['access_token'] = this.accessToken;
-      }
-
-      let request = axios.post('/api/register', formData);
-
-      request = request.then((response) => {
-        window.alert(`New account created`);
-        window.location.replace('/');
-      });
-
-      request = request.catch((error) => {
-        if (!error.isAxiosError) {
-          throw error;
-        }
-
-        const { response } = error;
-
-        this.errorMessage = response.data.message || `Status Code: ${response.status}`;
-
-        if (response.status === 422 && typeof response.data.errors === 'object') {
-          this.errors = response.data.errors;
-        }
-      });
-
-      request = request.finally(() => {
-        this.processing = null;
-      });
-
-      this.processing = request;
-
-      return request;
     },
   },
 
