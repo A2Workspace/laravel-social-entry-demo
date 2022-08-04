@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd2cebb2ff2431572703a34147b25dcc",
+    "content-hash": "5c9ba9cb71bf9992166cb139854da268",
     "packages": [
         {
             "name": "a2workspace/laravel-jwt",
-            "version": "v2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/A2Workspace/laravel-jwt.git",
-                "reference": "bea21ff54a99157723a568527f22355573fa0a52"
+                "reference": "b7fe3152c17912cfa884410995cc1bab7f356c33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/A2Workspace/laravel-jwt/zipball/bea21ff54a99157723a568527f22355573fa0a52",
-                "reference": "bea21ff54a99157723a568527f22355573fa0a52",
+                "url": "https://api.github.com/repos/A2Workspace/laravel-jwt/zipball/b7fe3152c17912cfa884410995cc1bab7f356c33",
+                "reference": "b7fe3152c17912cfa884410995cc1bab7f356c33",
                 "shasum": ""
             },
             "require": {
@@ -25,9 +25,9 @@
                 "php-open-source-saver/jwt-auth": "^1.4"
             },
             "require-dev": {
-                "orchestra/testbench": "4.x"
+                "orchestra/testbench": "6.x"
             },
-            "type": "project",
+            "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
@@ -40,11 +40,7 @@
                     "A2Workspace\\LaravelJwt\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -54,12 +50,12 @@
                     "email": "shishatw225@gmail.com"
                 }
             ],
-            "description": "提供 Laravel JWT 認證功能",
+            "description": "一個幾乎零配置的 API 認證服務",
             "support": {
-                "source": "https://github.com/A2Workspace/laravel-jwt/tree/v2.0.0",
-                "issues": "https://github.com/A2Workspace/laravel-jwt/issues"
+                "issues": "https://github.com/A2Workspace/laravel-jwt/issues",
+                "source": "https://github.com/A2Workspace/laravel-jwt/tree/2.1.0"
             },
-            "time": "2022-05-31T12:32:48+00:00"
+            "time": "2022-07-24T23:17:54+00:00"
         },
         {
             "name": "a2workspace/laravel-social-entry",
@@ -96,19 +92,7 @@
                     "A2Workspace\\SocialEntry\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "vendor/bin/phpunit"
-                ],
-                "test-coverage": [
-                    "vendor/bin/phpunit --coverage-html coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -123,23 +107,23 @@
                 "laravel"
             ],
             "support": {
-                "source": "https://github.com/A2Workspace/laravel-social-entry/tree/1.0.0",
-                "issues": "https://github.com/A2Workspace/laravel-social-entry/issues"
+                "issues": "https://github.com/A2Workspace/laravel-social-entry/issues",
+                "source": "https://github.com/A2Workspace/laravel-social-entry/tree/1.0.0"
             },
             "time": "2022-07-17T01:36:36+00:00"
         },
         {
             "name": "a2workspace/laravel-stubs",
-            "version": "0.2.1",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/A2Workspace/laravel-stubs.git",
-                "reference": "c87e1f23c6f9af720e1be15134683be2a7715396"
+                "reference": "40533a40a1ba852e5b74009b7d426587c9ef2222"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/A2Workspace/laravel-stubs/zipball/c87e1f23c6f9af720e1be15134683be2a7715396",
-                "reference": "c87e1f23c6f9af720e1be15134683be2a7715396",
+                "url": "https://api.github.com/repos/A2Workspace/laravel-stubs/zipball/40533a40a1ba852e5b74009b7d426587c9ef2222",
+                "reference": "40533a40a1ba852e5b74009b7d426587c9ef2222",
                 "shasum": ""
             },
             "require": {
@@ -161,11 +145,7 @@
                     "A2Workspace\\Stubs\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -177,10 +157,10 @@
             ],
             "description": "一個基於專案的類別模板注入器。",
             "support": {
-                "source": "https://github.com/A2Workspace/laravel-stubs/tree/0.2.1",
-                "issues": "https://github.com/A2Workspace/laravel-stubs/issues"
+                "issues": "https://github.com/A2Workspace/laravel-stubs/issues",
+                "source": "https://github.com/A2Workspace/laravel-stubs/tree/1.0.1"
             },
-            "time": "2022-07-17T18:35:59+00:00"
+            "time": "2022-07-20T03:06:37+00:00"
         },
         {
             "name": "asm89/stack-cors",
@@ -2795,6 +2775,60 @@
                 }
             ],
             "time": "2021-12-04T23:24:31+00:00"
+        },
+        {
+            "name": "protoqol/prequel",
+            "version": "1.23.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Protoqol/Prequel.git",
+                "reference": "cefa5a1d8517f179b32c4e0441ded0a88590645b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Protoqol/Prequel/zipball/cefa5a1d8517f179b32c4e0441ded0a88590645b",
+                "reference": "cefa5a1d8517f179b32c4e0441ded0a88590645b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-pdo": "*",
+                "laravel/framework": "^6.0|^7.0|^8.0|^9.0",
+                "php": "^7.2.5|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^3.7",
+                "phpmd/phpmd": "^2.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Protoqol\\Prequel\\PrequelServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Protoqol\\Prequel\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Quinten Schorsij",
+                    "email": "quinten@protoqol.xyz"
+                }
+            ],
+            "description": "Clear and concise database management.",
+            "support": {
+                "issues": "https://github.com/Protoqol/Prequel/issues",
+                "source": "https://github.com/Protoqol/Prequel/tree/v1.23.0"
+            },
+            "time": "2022-02-28T16:07:05+00:00"
         },
         {
             "name": "psr/container",

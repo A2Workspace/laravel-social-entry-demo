@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use A2Workspace\LaravelJwt\LaravelJwt;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,14 +13,4 @@ use A2Workspace\LaravelJwt\LaravelJwt;
 |
 */
 
-LaravelJwt::routes([
-    'prefix' => '/auth',
-    'namespace' => '\App\Http\Controllers\Client',
-    'as' => 'auth.',
-]);
-
-LaravelJwt::routes([
-    'prefix' => '/admin/auth',
-    'namespace' => '\App\Http\Controllers\Admin',
-    'as' => 'admin.auth.',
-]);
+Route::post('/register', App\Http\Controllers\Client\RegisterController::class);
