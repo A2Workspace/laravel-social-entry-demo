@@ -46,7 +46,9 @@ export default {
       const response = await this.$socialEntry.completeAuthorization();
 
       if (!response.data.new_user || response.data.local_user_id !== null) {
-        window.alert('This social account is already connected to a different user');
+        window.alert('The social account is already connected to a different user');
+
+        resetParams();
 
         return false;
       }

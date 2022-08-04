@@ -15,6 +15,7 @@ export default {
   data() {
     return {
       authState: {
+        loaded: false,
         user: null,
         token: null,
         strategy: moduleOptions.strategies['user'],
@@ -117,6 +118,7 @@ export default {
       }
 
       this.authState.user = userData;
+      axios.defaults.headers.common['Authorization'] = response.config.headers['Authorization'];
 
       return response;
     },
@@ -146,6 +148,8 @@ export default {
         window.sessionStorage.removeItem('token');
       }
     }
+
+    this.authState.loaded = true;
   },
 };
 

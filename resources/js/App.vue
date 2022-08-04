@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
-    <ProfilePage v-if="loggedIn" />
-    <LoginPage v-else />
+    <ProfilePage v-if="status === 'logged_in'" />
+    <LoginPage v-if="status === 'default'" />
   </div>
 </template>
 
@@ -14,6 +14,20 @@ import ProfilePage from './pages/profile';
 export default {
   mixins: [Auth, SocialEntry],
   components: { LoginPage, ProfilePage },
+
+  computed: {
+    status() {
+      if (! this.authState.loaded) {
+        return 'processing';
+      }
+
+      if (this.loggedIn) {
+        return 'logged_in';
+      }
+
+      return 'default';
+    },
+  },
 };
 </script>
 
