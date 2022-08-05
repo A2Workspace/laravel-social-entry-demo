@@ -100,7 +100,7 @@ export default {
       const { username, password } = this.form;
       const certificate = { username, password };
 
-      this.processing = this.doHandleLogin('user', certificate)
+      this.processing = this.doHandleLogin(certificate)
         // Handling error message.
         .catch((error) => {
           if (!error.isAxiosError) {

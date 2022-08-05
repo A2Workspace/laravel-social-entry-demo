@@ -59,15 +59,23 @@ export default {
   },
 
   methods: {
-    handleLogin(strategy, options) {
+    // =========================================================================
+    // = Login/Reigster
+    // =========================================================================
+
+    handleLogin(options) {
       resetParams();
 
-      return this.$auth.loginWith(strategy, options);
+      return this.$auth.loginWith('client', options);
     },
 
     handleRegister(formData) {
       return axios.post('/api/register', formData);
     },
+
+    // =========================================================================
+    // = Social Login
+    // =========================================================================
 
     handleSocialLogin(provider) {
       this.$socialEntry.authorize(provider).redirect();
@@ -80,6 +88,8 @@ export default {
         return false;
       }
 
+      // If is a new user,
+      // then make the form data and redirect user to register page.
       if (response.data.new_user || response.data.local_user_id == null) {
         this.registerMode = true;
 
@@ -97,11 +107,14 @@ export default {
         return true;
       }
 
-      const authResponse = await this.$socialEntry.loginWithToken(response.data.access_token);
+      // In here, we complete social login by access token.
+      else {
+        const authResponse = await this.$socialEntry.loginWithToken(response.data.access_token);
 
-      resetParams();
+        resetParams();
 
-      await this.$auth.setUserToken(authResponse.data.access_token);
+        await this.$auth.setUserToken(authResponse.data.access_token);
+      }
     },
 
     getSocialLoginRedirectUrl(provider) {

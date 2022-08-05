@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const moduleOptions = {
   strategies: {
-    user: {
+    client: {
       url: '/auth',
     },
     admin: {
@@ -18,7 +18,7 @@ export default {
         loaded: false,
         user: null,
         token: null,
-        strategy: moduleOptions.strategies['user'],
+        strategy: moduleOptions.strategies['client'],
       },
     };
   },

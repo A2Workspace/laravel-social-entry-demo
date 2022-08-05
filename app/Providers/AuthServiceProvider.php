@@ -31,12 +31,14 @@ class AuthServiceProvider extends ServiceProvider
 
         LaravelJwt::routes([
             'prefix' => '/auth',
+            'middleware' => 'assign.guard:client',
             'namespace' => '\App\Http\Controllers\Client',
             'as' => 'auth.',
         ]);
 
         LaravelJwt::routes([
             'prefix' => '/admin/auth',
+            'middleware' => 'assign.guard:admin',
             'namespace' => '\App\Http\Controllers\Admin',
             'as' => 'admin.auth.',
         ]);
