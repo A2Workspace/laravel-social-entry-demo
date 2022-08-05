@@ -31,25 +31,53 @@ export default {
     };
   },
 
+  methods: {
+    watchRegisterModeValue() {
+      const ref = this.$refs.clientLogin;
+
+      if (!ref) {
+        return;
+      }
+
+      if (this._registerModeValueRef && this._registerModeValueRef === ref) {
+        return;
+      }
+
+      this._registerModeValueRef = ref;
+
+      if (this._registerModeValueWatcher) {
+        this._registerModeValueWatcher();
+      }
+
+      this._registerModeValueWatcher = this.$watch(
+        () => ref.registerMode,
+        (value) => {
+          this.registerMode = value;
+        }
+      );
+    },
+  },
+
   computed: {
     inputAdminMode: {
       get() {
         return this.adminMode;
       },
       set(v) {
-        resetParams();
         this.adminMode = v;
+
+        // Reset URL params when pane switch toggled.
+        resetParams();
       },
     },
   },
 
+  updated() {
+    this.watchRegisterModeValue();
+  },
+
   mounted() {
-    this.$watch(
-      () => this.$refs.clientLogin.registerMode,
-      (value) => {
-        this.registerMode = value;
-      }
-    );
+    this.watchRegisterModeValue();
   },
 };
 </script>
