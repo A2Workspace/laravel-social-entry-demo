@@ -4,9 +4,13 @@
       <PaneSwitch inactiveText="Client" activeText="Admin" v-model="adminMode" />
     </div>
 
-    <AdminLoginPage v-if="status === 'admin_login'" />
-    <ProfilePage v-if="status === 'logged_in'" />
-    <LoginPage v-if="status === 'default'" />
+    <div class="transition-wrapper">
+      <transition name="traverse">
+        <AdminLoginPage v-if="status === 'admin_login'" />
+        <ProfilePage v-if="status === 'logged_in'" />
+        <LoginPage v-if="status === 'default'" />
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -65,15 +69,50 @@ body {
 
 .wrapper {
   position: relative;
-  height: 100%;
+  overflow: hidden;
+  min-height: 100%;
 }
 
 .pane-switch-pos {
   display: grid;
   place-content: center;
   width: 100%;
-  margin-top: 10vh;
-  margin-bottom: 57px;
+  padding-top: 10vh;
+  padding-bottom: 57px;
+}
+
+.transition-wrapper {
+  position: relative;
+}
+
+.traverse-enter-active,
+.traverse-leave-active {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  transition-property: opacity transform;
+  transition-duration: 600ms;
+}
+
+.traverse-enter-active {
+  /* opacity: 0; */
+  transform: translateX(300px) scale(1.05);
+  box-shadow: 0 50px );
+}
+
+.traverse-enter-to {
+  /* opacity: 1; */
+  transform: translateX(0);
+}
+
+.traverse-leave-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.traverse-leave-to {
+  opacity: 0;
+  transform: translateX(-300px);
 }
 </style>
 
