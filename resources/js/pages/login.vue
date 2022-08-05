@@ -1,18 +1,19 @@
 <template>
   <div class="login-page-wrapper">
-    <div class="pane-switch-pos">
-      <PaneSwitch inactiveText="Client" activeText="Admin" v-model="adminMode" />
+    <div class="pane-switch-pos" :class="{ '--hide': registerMode }">
+      <PaneSwitch inactiveText="Client" activeText="Admin" v-model="inputAdminMode" />
     </div>
 
     <transition name="traverse">
       <AdminLoginPage v-if="adminMode" />
-      <ClientLoginPage v-else />
+      <ClientLoginPage v-else :registerMode="registerMode" ref="clientLogin" />
     </transition>
   </div>
 </template>
 
 <script>
 import PaneSwitch from '../components/PaneSwitch';
+import { resetParams } from '../mixins/SocialEntry';
 import AdminLoginPage from './admin/login';
 import ClientLoginPage from './client/login';
 
@@ -26,13 +27,29 @@ export default {
   data() {
     return {
       adminMode: false,
+      registerMode: false,
     };
   },
 
   computed: {
-    isAdminMode() {
-      return this.adminMode;
+    inputAdminMode: {
+      get() {
+        return this.adminMode;
+      },
+      set(v) {
+        resetParams();
+        this.adminMode = v;
+      },
     },
+  },
+
+  mounted() {
+    this.$watch(
+      () => this.$refs.clientLogin.registerMode,
+      (value) => {
+        this.registerMode = value;
+      }
+    );
   },
 };
 </script>
@@ -50,6 +67,14 @@ export default {
   place-content: center;
   width: 100%;
   top: 10vh;
+
+  transition-property: opacity top;
+  transition-duration: 300ms;
+}
+
+.pane-switch-pos.--hide {
+  opacity: 0;
+  top: 5vh;
 }
 
 .transition-wrapper {

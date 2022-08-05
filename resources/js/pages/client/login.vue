@@ -73,10 +73,6 @@ export default {
       this.$socialEntry.authorize(provider).redirect();
     },
 
-    getSocialLoginRedirectUrl(provider) {
-      return this.$socialEntry.authorize(provider).getTargetUrl();
-    },
-
     async completeSocialLogin() {
       const response = await this.$socialEntry.completeAuthorization().catch(() => {});
 
@@ -106,6 +102,10 @@ export default {
       resetParams();
 
       await this.$auth.setUserToken(authResponse.data.access_token);
+    },
+
+    getSocialLoginRedirectUrl(provider) {
+      return this.$socialEntry.authorize(provider).getTargetUrl();
     },
   },
 
