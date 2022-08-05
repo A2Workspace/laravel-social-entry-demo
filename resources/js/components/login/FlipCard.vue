@@ -31,10 +31,14 @@ export default {
     },
 
     correctOuterHeight() {
-      if (!this.flipped) {
-        this.$refs.container.style.height = this.$refs.front.offsetHeight + 'px';
-      } else {
-        this.$refs.container.style.height = this.$refs.back.offsetHeight + 'px';
+      const containerElement = this.$refs.container;
+
+      if (containerElement) {
+        if (!this.flipped) {
+          containerElement.style.height = this.$refs.front.offsetHeight + 'px';
+        } else {
+          containerElement.style.height = this.$refs.back.offsetHeight + 'px';
+        }
       }
     },
   },
