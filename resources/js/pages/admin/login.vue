@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import BaseLoginPage from '../login';
+import BaseLoginPage from '../client/login';
 
 export default {
   extends: BaseLoginPage,

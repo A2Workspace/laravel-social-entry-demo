@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import Card from '../components/profile/Card';
-import CardDescs from '../components/profile/CardDescs';
-import CardDescsItem from '../components/profile/CardDescsItem';
-import CardDescsSocialite from '../components/profile/CardDescsSocialite';
-import { resetParams } from '../mixins/SocialEntry';
+import Card from '../../components/profile/Card';
+import CardDescs from '../../components/profile/CardDescs';
+import CardDescsItem from '../../components/profile/CardDescsItem';
+import CardDescsSocialite from '../../components/profile/CardDescsSocialite';
+import { resetParams } from '../../mixins/SocialEntry';
 
 export default {
   components: {
