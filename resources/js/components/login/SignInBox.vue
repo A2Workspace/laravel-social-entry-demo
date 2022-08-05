@@ -20,7 +20,7 @@ export default {
   width: 400px;
   height: auto;
   margin: 0 auto;
-  background: #fff;
+  background: var(--sign-in-box-bg, #fff);
   border: 1px solid #efefef;
   border-radius: 2px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
@@ -37,17 +37,15 @@ export default {
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
-
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-
   padding: 10px 10px 0;
-
   color: #555;
   font-size: 14px;
   line-height: 1;
+  user-select: none;
 }
 
 .sign-in-box__top-actions a {
@@ -65,13 +63,12 @@ export default {
 
 .sign-in-box__inner {
   position: relative;
+  z-index: 200;
 
   box-sizing: border-box;
   width: 100%;
   height: 100%;
   padding: 40px 30px 40px;
-
-  background: #fff;
 }
 
 /* =============================================================================

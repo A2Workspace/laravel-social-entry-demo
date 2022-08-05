@@ -5,8 +5,12 @@
     </div>
 
     <transition name="traverse">
-      <AdminLoginPage v-if="adminMode" />
-      <ClientLoginPage v-else :registerMode="registerMode" ref="clientLogin" />
+      <template v-if="adminMode">
+        <AdminLoginPage />
+      </template>
+      <template v-else>
+        <ClientLoginPage :registerMode="registerMode" ref="clientLogin" />
+      </template>
     </transition>
   </div>
 </template>
