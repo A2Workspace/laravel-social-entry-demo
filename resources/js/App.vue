@@ -44,7 +44,8 @@ body {
 
 .wrapper {
   position: relative;
-  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .fade-enter-active,

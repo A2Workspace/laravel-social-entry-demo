@@ -2,7 +2,7 @@
   <div class="login-page">
     <FlipCard ref="card" v-model="registerMode">
       <template #front>
-        <LoginSection>
+        <LoginPane>
           <template #actions>
             <span></span>
             <a href="#" draggable="false" @click="registerMode = true">
@@ -10,17 +10,17 @@
               <i class="fas fa-external-link" />
             </a>
           </template>
-        </LoginSection>
+        </LoginPane>
       </template>
 
       <template #back>
-        <RegisterSection :options="registerOptions">
+        <RegisterPane :options="registerOptions">
           <template #actions>
             <a href="#" draggable="false" @click="registerMode = false">
               <span>Sign In</span>
             </a>
           </template>
-        </RegisterSection>
+        </RegisterPane>
       </template>
     </FlipCard>
   </div>
@@ -29,15 +29,15 @@
 <script>
 import axios from 'axios';
 import FlipCard from '../../components/login/FlipCard';
-import LoginSection from '../../components/login/LoginSection';
-import RegisterSection from '../../components/login/RegisterSection';
+import LoginPane from '../../components/login/LoginPane';
+import RegisterPane from '../../components/login/RegisterPane';
 import { resetParams } from '../../mixins/SocialEntry';
 
 export default {
   components: {
     FlipCard,
-    LoginSection,
-    RegisterSection,
+    LoginPane,
+    RegisterPane,
   },
 
   inject: ['$auth', '$socialEntry'],

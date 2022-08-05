@@ -63,8 +63,6 @@ export default {
 
 .sign-in-box__inner {
   position: relative;
-  z-index: 200;
-
   box-sizing: border-box;
   width: 100%;
   height: 100%;

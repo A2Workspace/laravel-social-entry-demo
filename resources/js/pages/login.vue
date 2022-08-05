@@ -1,5 +1,5 @@
 <template>
-  <div class="login-page-wrapper">
+  <div class="login-page-wrap">
     <div class="pane-switch-pos" :class="{ '--hide': registerMode }">
       <PaneSwitch inactiveText="Client" activeText="Admin" v-model="inputAdminMode" />
     </div>
@@ -87,10 +87,8 @@ export default {
 </script>
 
 <style>
-.login-page-wrapper {
-  overflow: hidden;
-  position: relative;
-  height: 100%;
+.login-page-wrap {
+  /* position: relative; */
 }
 
 .pane-switch-pos {
@@ -100,7 +98,7 @@ export default {
   width: 100%;
   top: 10vh;
 
-  transition-property: opacity top;
+  transition-property: opacity, top;
   transition-duration: 300ms;
 }
 
@@ -118,7 +116,7 @@ export default {
   position: absolute;
   top: 0;
   width: 100%;
-  transition-property: opacity transform;
+  transition-property: opacity, transform;
   transition-duration: 600ms;
 }
 

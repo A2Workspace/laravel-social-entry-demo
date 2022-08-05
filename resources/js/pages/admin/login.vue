@@ -1,6 +1,6 @@
 <template>
   <div class="login-page">
-    <LoginSection headerText="Login As Administrator"></LoginSection>
+    <LoginPane headerText="Login As Admin"></LoginPane>
   </div>
 </template>
 
@@ -38,8 +38,8 @@ export default {
     -45deg,
     var(--sign-in-box-bg, #fff),
     var(--sign-in-box-bg, #fff) 12px,
-    var(--sign-in-box-decorated-color, #c3c8d5) 12px,
-    var(--sign-in-box-decorated-color, #c3c8d5) 24px
+    var(--sign-in-box-decorated-color, #d2d6e0) 12px,
+    var(--sign-in-box-decorated-color, #d2d6e0) 24px
   );
 }
 

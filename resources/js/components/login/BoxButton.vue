@@ -1,9 +1,9 @@
 <template>
-  <button class="section-button" :disabled="processing">
+  <button class="box-button" :disabled="processing">
     <span v-show="!processing">
       <slot>{{ text }}</slot>
     </span>
-    <span class="section-button__icon" v-show="processing">
+    <span class="box-button__icon" v-show="processing">
       <i :class="icon" />
     </span>
   </button>
@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style scoped>
-.section-button {
+.box-button {
   box-sizing: border-box;
   width: 100%;
   height: 44px;
@@ -47,27 +47,27 @@ export default {
   user-select: none;
 }
 
-.section-button:hover {
+.box-button:hover {
   background-color: #545f78;
   transition: background-color 200ms ease-out;
 }
 
-.section-button:active {
+.box-button:active {
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2) inset;
   padding-top: 3px;
 }
 
-.section-button:disabled {
+.box-button:disabled {
   background-color: #3f475a !important;
   color: #ccc;
   cursor: progress;
 }
 
-.section-button__icon {
+.box-button__icon {
   font-size: 1.3em;
 }
 
-.section-button__icon i {
+.box-button__icon i {
   animation: spin 900ms linear infinite;
 }
 

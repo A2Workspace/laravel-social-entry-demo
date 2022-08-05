@@ -5,12 +5,12 @@
     </div>
 
     <div class="sign-in-box__contain">
-      <SectionHeader>{{ headerText }}</SectionHeader>
+      <BoxHeader>{{ headerText }}</BoxHeader>
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
       <form class="sign-in-box__form" ref="form" :class="{ '--shaking': errorMessage }" @submit.prevent="handleLogin">
-        <SectionFormItem
+        <BoxFormItem
           type="text"
           label="Username"
           name="username"
@@ -18,7 +18,7 @@
           v-model="form.username"
         />
 
-        <SectionFormItem
+        <BoxFormItem
           type="password"
           label="Password"
           name="password"
@@ -27,7 +27,7 @@
           v-model="form.password"
         />
 
-        <SectionButton :processing="isProcessing">Sign In</SectionButton>
+        <BoxButton :processing="isProcessing">{{ loginButtonText }}</BoxButton>
       </form>
     </div>
 
@@ -46,17 +46,17 @@
 </template>
 
 <script>
-import SectionButton from './SectionButton';
-import SectionFormItem from './SectionFormItem';
-import SectionHeader from './SectionHeader';
+import BoxButton from './BoxButton';
+import BoxFormItem from './BoxFormItem';
+import BoxHeader from './BoxHeader';
 import SignInBox from './SignInBox';
 import SocialEntry from './SocialEntry';
 
 export default {
   components: {
-    SectionButton,
-    SectionFormItem,
-    SectionHeader,
+    BoxButton,
+    BoxFormItem,
+    BoxHeader,
     SignInBox,
     SocialEntry,
   },
@@ -64,6 +64,9 @@ export default {
   props: {
     headerText: {
       default: 'Social Entry',
+    },
+    loginButtonText: {
+      default: 'Sign In',
     },
   },
 
