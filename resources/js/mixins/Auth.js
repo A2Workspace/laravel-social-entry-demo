@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const storage = window.sessionStorage;
+
 const moduleOptions = {
   strategies: {
     client: {
@@ -18,7 +20,8 @@ export default {
         loaded: false,
         user: null,
         token: null,
-        strategy: moduleOptions.strategies['client'],
+        strategy: 'client',
+        options: {},
       },
     };
   },
@@ -48,7 +51,12 @@ export default {
 
   methods: {
     setStrategy(name) {
-      this.authState.strategy = moduleOptions.strategies[name];
+      if (!moduleOptions.strategies[name]) {
+        throw new Error(`Strategy "${name}" is not defined!`);
+      }
+
+      this.authState.strategy = name;
+      this.authState.options = moduleOptions.strategies[name];
 
       return this;
     },
@@ -68,7 +76,7 @@ export default {
 
       options = {
         data: {},
-        ...this.authState.strategy,
+        ...this.authState.options,
         ...options,
       };
 
@@ -88,7 +96,7 @@ export default {
       this.authState.token = null;
 
       axios.defaults.headers.common['Authorization'] = null;
-      window.sessionStorage.removeItem('token');
+      storage.removeItem('token');
 
       return Promise.resolve(true);
     },
@@ -100,7 +108,7 @@ export default {
     async fetchUser(options = {}) {
       options = {
         token: this.authState.token,
-        ...this.authState.strategy,
+        ...this.authState.options,
         ...options,
       };
 
@@ -122,6 +130,7 @@ export default {
       }
 
       this.authState.user = userData;
+      storage.setItem('strategy', this.authState.strategy);
       axios.defaults.headers.common['Authorization'] = response.config.headers['Authorization'];
 
       return response;
@@ -133,23 +142,30 @@ export default {
       }
 
       this.authState.token = token;
-      window.sessionStorage.setItem('token', token);
+      storage.setItem('token', token);
 
       return await this.fetchUser();
     },
   },
 
   async created() {
-    const token = window.sessionStorage.getItem('token');
+    // Retrieve last strategy.
+    const storedStrategy = storage.getItem('strategy');
+    if (storedStrategy) {
+      this.setStrategy(storedStrategy);
+    } else {
+      this.setStrategy('client');
+    }
 
-    // Retrieve the user data from stored token.
-    if (token) {
-      this.authState.token = token;
+    // Retrieve user data from stored token.
+    const storedToken = storage.getItem('token');
+    if (storedToken) {
+      this.authState.token = storedToken;
 
       try {
         await this.fetchUser();
       } catch (error) {
-        window.sessionStorage.removeItem('token');
+        storage.removeItem('token');
       }
     }
 
