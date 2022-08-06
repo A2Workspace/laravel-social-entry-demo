@@ -17,7 +17,6 @@
 
 <script>
 import PaneSwitch from '@/components/PaneSwitch';
-import { resetParams } from '@/mixins/SocialEntry';
 import AdminLoginPage from './admin/login';
 import ClientLoginPage from './client/login';
 
@@ -70,17 +69,29 @@ export default {
       set(v) {
         this.adminMode = v;
 
-        // Reset URL params when pane switch toggled.
-        resetParams();
+        if (this.adminMode) {
+          window.history.replaceState(null, null, '?admin');
+        } else {
+          window.history.replaceState(null, null, '?');
+        }
       },
     },
   },
 
-  updated() {
-    this.watchRegisterModeValue();
+  created() {
+    // Retrieve adminMode state from URL params.
+    const parars = new URLSearchParams(window.location.search);
+
+    if (parars.has('admin') && parars.get('admin') !== 'false') {
+      this.adminMode = true;
+    }
   },
 
   mounted() {
+    this.watchRegisterModeValue();
+  },
+
+  updated() {
     this.watchRegisterModeValue();
   },
 };
@@ -89,6 +100,7 @@ export default {
 <style>
 .login-page-wrap {
   /* position: relative; */
+  box-sizing: border-box;
 }
 
 .pane-switch-pos {
