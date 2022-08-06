@@ -42,7 +42,7 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  padding: 10px 10px 0;
+  padding: 4px 4px 0;
   color: #555;
   font-size: 14px;
   line-height: 1;
@@ -50,6 +50,7 @@ export default {
 }
 
 .sign-in-box__top-actions a {
+  padding: 6px;
   color: #555;
   text-decoration: none;
 }

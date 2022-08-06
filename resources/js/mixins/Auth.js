@@ -39,6 +39,7 @@ export default {
   provide() {
     const $auth = {
       setStrategy: this.setAuthStrategy,
+      getStrategy: () => this.authState.strategy,
       login: this.login,
       loginWith: this.loginWith,
       logout: this.logout,
@@ -98,8 +99,10 @@ export default {
       this.authState.user = null;
       this.authState.token = null;
 
-      axios.defaults.headers.common['Authorization'] = null;
       storage.removeItem('token');
+      storage.removeItem('strategy');
+
+      axios.defaults.headers.common['Authorization'] = null;
 
       return Promise.resolve(true);
     },
@@ -155,7 +158,7 @@ export default {
     // Restore last strategy.
     const storedStrategy = storage.getItem('strategy');
     if (storedStrategy) {
-      log(`[Auth Module] Restore strategy: ${storedStrategy}`);
+      log(`[Auth Module] Restore strategy from sessionStorage: ${storedStrategy}`);
 
       this.setAuthStrategy(storedStrategy);
     } else {
@@ -165,7 +168,7 @@ export default {
     // Restore user data.
     const storedToken = storage.getItem('token');
     if (storedToken) {
-      log('[Auth Module] Restore user data');
+      log('[Auth Module] Restore token from sessionStorage');
 
       this.authState.token = storedToken;
 

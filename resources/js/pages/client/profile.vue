@@ -82,8 +82,6 @@ export default {
 
     async handleLogout() {
       this.$auth.logout();
-
-      window.location.replace('/');
     },
   },
 

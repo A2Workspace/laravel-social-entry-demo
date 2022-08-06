@@ -69,6 +69,8 @@ export default {
           return targetUrl;
         },
         redirect() {
+          log(`[SocialEntry Module] authorize > redirect user to "${targetUrl}"`);
+
           window.location.assign(targetUrl);
         },
       };
@@ -84,20 +86,24 @@ export default {
       };
 
       if (!options.authCode) {
-        log('[SocialEntry Module] completeAuthorization.aborted');
+        log('[SocialEntry Module] completeAuthorization > aborted');
         return new Promise(() => {});
       }
 
       if (this.socialEntryState.processing) {
+        log('[SocialEntry Module] completeAuthorization > processing');
         return this.socialEntryState.processing;
       }
 
       if (this.socialEntryState.lastAccessTokenResponse) {
+        log('[SocialEntry Module] completeAuthorization > return last result');
         return Promise.resolve(this.socialEntryState.lastAccessTokenResponse);
       }
 
       // Post to https://localhost:8000/auto/socialite/token
       // to grant access_token and get social user information.
+      log(`[SocialEntry Module] completeAuthorization > post to "${options.url}/token"`);
+
       let request = axios.request({
         method: 'POST',
         url: `${options.url}/token`,
@@ -107,6 +113,8 @@ export default {
       });
 
       let resolvedRequest = request.then((response) => {
+        log(`[SocialEntry Module] completeAuthorization > resolving response`);
+
         this.socialEntryState.lastAccessTokenResponse = response;
         this.socialEntryState.accessToken = response.data.access_token;
 
@@ -147,6 +155,8 @@ export default {
 
       // Post to https://localhost:8000/auto/socialite/login
       // to login by access token.
+      log(`[SocialEntry Module] loginWithToken > post to "${options.url}/login"`);
+
       let request = axios.request({
         method: 'POST',
         url: `${options.url}/login`,
@@ -173,6 +183,8 @@ export default {
 
       // Post to https://localhost:8000/auto/socialite/connect
       // to connect social account to current logged in user.
+      log(`[SocialEntry Module] connectWithToken > post to "${options.url}/connect"`);
+
       let request = axios.request({
         method: 'POST',
         url: `${options.url}/connect`,
@@ -191,6 +203,8 @@ export default {
         identifier,
         ...options,
       };
+
+      log(`[SocialEntry Module] disconnect > post to "${options.url}/disconnect"`);
 
       let request = axios.request({
         method: 'POST',

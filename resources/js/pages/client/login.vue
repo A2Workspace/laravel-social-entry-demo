@@ -92,7 +92,7 @@ export default {
       // If is a new user,
       // then make the form data and redirect user to register page.
       if (response.data.new_user || response.data.local_user_id == null) {
-        log('[Page: client/login.vue] completeSocialLogin.new_user');
+        log('[Page: client/login.vue] completeSocialLogin > new_user');
 
         this.registerMode = true;
 
@@ -112,7 +112,7 @@ export default {
 
       // In here, we complete social login by access token.
       else {
-        log('[Page: client/login.vue] completeSocialLogin.loginWithToken');
+        log('[Page: client/login.vue] completeSocialLogin > loginWithToken');
 
         const authResponse = await this.$socialEntry.loginWithToken(response.data.access_token);
 

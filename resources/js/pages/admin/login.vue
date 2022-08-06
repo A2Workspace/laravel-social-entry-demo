@@ -33,9 +33,9 @@ export default {
       // If is a new user,
       // then make the form data and redirect user to register page.
       if (response.data.new_user || response.data.local_user_id == null) {
-        log('[Page: admin/login.vue] completeSocialLogin.new_user');
+        log('[Page: admin/login.vue] completeSocialLogin > new_user');
 
-        window.alert('The social account has not been connected to any administrator user');
+        window.alert('The social account is not connected to any administrator user');
 
         resetParams();
 

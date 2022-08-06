@@ -102,7 +102,7 @@ export default {
   transition-property: transform;
   transition-delay: 20ms;
   transition-duration: 800ms;
-  transition-timing-function: cubic-bezier(0.5, 1.2, 0.5, 1.2);
+  transition-timing-function: cubic-bezier(0.5, 1.18, 0.5, 1.18);
 }
 
 .flip-card__front {

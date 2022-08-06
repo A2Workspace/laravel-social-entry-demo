@@ -31,7 +31,7 @@ export default {
     ClientLoginPage,
   },
 
-  inject: ['$socialEntry'],
+  inject: ['$auth', '$socialEntry'],
 
   data() {
     return {
@@ -76,8 +76,10 @@ export default {
         this.adminMode = v;
 
         if (this.adminMode) {
+          log('[Page: login.vue] Switch to admin user login pane');
           window.history.replaceState(null, null, '?admin');
         } else {
+          log('[Page: login.vue] Switch to default login pane');
           window.history.replaceState(null, null, '?');
         }
       },
@@ -85,17 +87,20 @@ export default {
   },
 
   created() {
-    // Retrieve adminMode state from URL params.
-    const parars = new URLSearchParams(window.location.search);
+    if (this.$auth.getStrategy() === 'admin') {
+      log('[Page: login.vue] Sync admin mode status');
 
+      this.adminMode = true;
+    }
+
+    const parars = new URLSearchParams(window.location.search);
     if (parars.has('admin') && parars.get('admin') !== 'false') {
       log('[Page: login.vue] Restore admin mode');
 
       this.adminMode = true;
+      this.$auth.setStrategy('admin');
       this.$socialEntry.setStrategy('admin');
-    }
-
-    log('[Page: login.vue] created');
+    } else log('[Page: login.vue] created');
   },
 
   mounted() {
