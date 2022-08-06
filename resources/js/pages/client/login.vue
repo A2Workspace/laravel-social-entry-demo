@@ -81,7 +81,7 @@ export default {
     },
 
     async completeSocialLogin() {
-      console.log(`[Page: client/login.vue] completeSocialLogin`);
+      log('[Page: client/login.vue] completeSocialLogin');
 
       const response = await this.$socialEntry.completeAuthorization().catch(() => {});
 
@@ -92,7 +92,7 @@ export default {
       // If is a new user,
       // then make the form data and redirect user to register page.
       if (response.data.new_user || response.data.local_user_id == null) {
-        console.log(`[Page: client/login.vue] completeSocialLogin.new_user`);
+        log('[Page: client/login.vue] completeSocialLogin.new_user');
 
         this.registerMode = true;
 
@@ -112,7 +112,7 @@ export default {
 
       // In here, we complete social login by access token.
       else {
-        console.log(`[Page: client/login.vue] completeSocialLogin.loginWithToken`);
+        log('[Page: client/login.vue] completeSocialLogin.loginWithToken');
 
         const authResponse = await this.$socialEntry.loginWithToken(response.data.access_token);
 
@@ -142,6 +142,10 @@ function resolveUsername(email) {
 
 export function resetParams() {
   window.history.replaceState({}, window.document.title, window.location.href.split('?')[0]);
+}
+
+export function log(message) {
+  console.log(`%c${message}`, 'background: #a9dfbf');
 }
 </script>
 

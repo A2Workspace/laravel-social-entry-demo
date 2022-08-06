@@ -52,7 +52,7 @@ export default {
 
   methods: {
     setAuthStrategy(name) {
-      console.log(`[Auth Module] setAuthStrategy: ${name}`);
+      log(`[Auth Module] setAuthStrategy: ${name}`);
 
       if (!moduleOptions.strategies[name]) {
         throw new Error(`Strategy "${name}" is not defined!`);
@@ -155,7 +155,7 @@ export default {
     // Restore last strategy.
     const storedStrategy = storage.getItem('strategy');
     if (storedStrategy) {
-      console.log('[Auth Module] Restore strategy: ' + storedStrategy);
+      log(`[Auth Module] Restore strategy: ${storedStrategy}`);
 
       this.setAuthStrategy(storedStrategy);
     } else {
@@ -165,7 +165,7 @@ export default {
     // Restore user data.
     const storedToken = storage.getItem('token');
     if (storedToken) {
-      console.log('[Auth Module] Restore user data');
+      log('[Auth Module] Restore user data');
 
       this.authState.token = storedToken;
 
@@ -177,7 +177,7 @@ export default {
     }
 
     this.authState.loaded = true;
-    console.log('[Auth Module] created');
+    log('[Auth Module] created');
   },
 };
 
@@ -187,4 +187,8 @@ export default {
 
 function isAccessibility(value) {
   return typeof value === 'object' && value !== null;
+}
+
+function log(message) {
+  console.log(`%c${message}`, 'background: #d6eaf8');
 }

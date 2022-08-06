@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import BaseLoginPage, { resetParams } from '../client/login';
+import BaseLoginPage, { resetParams, log } from '../client/login';
 
 export default {
   extends: BaseLoginPage,
@@ -22,7 +22,7 @@ export default {
      * @override
      */
     async completeSocialLogin() {
-      console.log(`[Page: admin/login.vue] completeSocialLogin`);
+      log('[Page: admin/login.vue] completeSocialLogin');
 
       const response = await this.$socialEntry.completeAuthorization().catch(() => {});
 
@@ -33,7 +33,7 @@ export default {
       // If is a new user,
       // then make the form data and redirect user to register page.
       if (response.data.new_user || response.data.local_user_id == null) {
-        console.log(`[Page: admin/login.vue] completeSocialLogin.new_user`);
+        log('[Page: admin/login.vue] completeSocialLogin.new_user');
 
         window.alert('The social account has not been connected to any administrator user');
 
@@ -44,7 +44,7 @@ export default {
 
       // In here, we complete social login by access token.
       else {
-        console.log(`[Page: admin/login.vue] completeSocialLogin.loginWithToken`);
+        log('[Page: admin/login.vue] completeSocialLogin.loginWithToken');
 
         const authResponse = await this.$socialEntry.loginWithToken(response.data.access_token);
 

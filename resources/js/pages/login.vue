@@ -85,13 +85,13 @@ export default {
     const parars = new URLSearchParams(window.location.search);
 
     if (parars.has('admin') && parars.get('admin') !== 'false') {
-      console.log(`[Page: login.vue] Restore admin mode`);
+      log('[Page: login.vue] Restore admin mode');
 
       this.adminMode = true;
       this.$socialEntry.setStrategy('admin');
     }
 
-    console.log(`[Page: login.vue] created`);
+    log('[Page: login.vue] created');
   },
 
   mounted() {
@@ -102,6 +102,10 @@ export default {
     this.watchRegisterModeValue();
   },
 };
+
+function log(message) {
+  console.log(`%c${message}`, 'background: #d4efdf');
+}
 </script>
 
 <style>

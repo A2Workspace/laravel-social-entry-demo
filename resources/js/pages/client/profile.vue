@@ -99,7 +99,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .profile-page {
   box-sizing: border-box;
   padding-top: 110px;

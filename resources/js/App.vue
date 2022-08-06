@@ -1,8 +1,9 @@
 <template>
   <div class="wrapper">
     <transition name="fade" mode="out-in" v-if="loaded">
-      <ProfilePage v-if="isLoggedIn" />
-      <LoginPage v-else />
+      <AdminProfilePage v-if="'admin.profile' === status" />
+      <ClientProfilePage v-if="'client.profile' === status" />
+      <MixLoginPage v-if="'login' === status" />
     </transition>
   </div>
 </template>
@@ -10,13 +11,15 @@
 <script>
 import Auth from './mixins/Auth';
 import SocialEntry from './mixins/SocialEntry';
-import LoginPage from './pages/login';
-import ProfilePage from './pages/client/profile';
+import MixLoginPage from './pages/login';
+import AdminProfilePage from './pages/admin/profile';
+import ClientProfilePage from './pages/client/profile';
 
 export default {
   components: {
-    LoginPage,
-    ProfilePage,
+    MixLoginPage,
+    AdminProfilePage,
+    ClientProfilePage,
   },
 
   mixins: [Auth, SocialEntry],
@@ -26,8 +29,16 @@ export default {
       return this.authState.loaded;
     },
 
-    isLoggedIn() {
-      return this.loggedIn;
+    status() {
+      if (this.loggedIn) {
+        if (this.authState.strategy === 'admin') {
+          return 'admin.profile';
+        } else {
+          return 'client.profile';
+        }
+      }
+
+      return 'login';
     },
   },
 };

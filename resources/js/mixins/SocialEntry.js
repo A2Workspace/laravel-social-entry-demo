@@ -42,7 +42,7 @@ export default {
 
   methods: {
     setSocialEntryStrategy(name) {
-      console.log(`[SocialEntry Module] setSocialEntryStrategy: ${name}`);
+      log(`[SocialEntry Module] setSocialEntryStrategy: ${name}`);
 
       if (!moduleOptions.strategies[name]) {
         throw new Error(`Strategy "${name}" is not defined!`);
@@ -75,8 +75,6 @@ export default {
     },
 
     completeAuthorization(authCode = null, options = {}) {
-      console.log('[SocialEntry Module] completeAuthorization');
-
       authCode = authCode || getParam('code');
 
       options = {
@@ -86,7 +84,7 @@ export default {
       };
 
       if (!options.authCode) {
-        console.log('[SocialEntry Module] completeAuthorization.aborted');
+        log('[SocialEntry Module] completeAuthorization.aborted');
         return new Promise(() => {});
       }
 
@@ -210,7 +208,7 @@ export default {
   async created() {
     this.setSocialEntryStrategy('client');
 
-    console.log('[SocialEntry Module] created');
+    log('[SocialEntry Module] created');
   },
 };
 
@@ -224,4 +222,8 @@ export function getParam(key) {
 
 export function resetParams() {
   window.history.replaceState({}, window.document.title, window.location.href.split('?')[0]);
+}
+
+function log(message) {
+  console.log(`%c${message}`, 'background: #e8daef');
 }
