@@ -29,6 +29,12 @@ class AuthServiceProvider extends ServiceProvider
 
         SocialEntry::routes();
 
+        SocialEntry::routes(function ($registrar) {
+            $registrar->all([
+                'prefix' => '/admin/auth/socialite',
+            ]);
+        });
+
         LaravelJwt::routes([
             'prefix' => '/auth',
             'middleware' => 'assign.guard:client',

@@ -27,7 +27,7 @@ export default {
 
   provide() {
     const $socialEntry = {
-      setStrategy: this.setStrategy,
+      setStrategy: this.setSocialEntryStrategy,
       authorize: this.authorize,
       completeAuthorization: this.completeAuthorization,
       loginWithToken: this.loginWithToken,
@@ -41,7 +41,9 @@ export default {
   },
 
   methods: {
-    setStrategy(name) {
+    setSocialEntryStrategy(name) {
+      console.log(`[SocialEntry Module] setSocialEntryStrategy: ${name}`);
+
       if (!moduleOptions.strategies[name]) {
         throw new Error(`Strategy "${name}" is not defined!`);
       }
@@ -73,6 +75,8 @@ export default {
     },
 
     completeAuthorization(authCode = null, options = {}) {
+      console.log('[SocialEntry Module] completeAuthorization');
+
       authCode = authCode || getParam('code');
 
       options = {
@@ -82,6 +86,7 @@ export default {
       };
 
       if (!options.authCode) {
+        console.log('[SocialEntry Module] completeAuthorization.aborted');
         return new Promise(() => {});
       }
 
@@ -203,7 +208,9 @@ export default {
   },
 
   async created() {
-    this.setStrategy('client');
+    this.setSocialEntryStrategy('client');
+
+    console.log('[SocialEntry Module] created');
   },
 };
 

@@ -38,7 +38,7 @@ export default {
 
   provide() {
     const $auth = {
-      setStrategy: this.setStrategy,
+      setStrategy: this.setAuthStrategy,
       login: this.login,
       loginWith: this.loginWith,
       logout: this.logout,
@@ -51,7 +51,9 @@ export default {
   },
 
   methods: {
-    setStrategy(name) {
+    setAuthStrategy(name) {
+      console.log(`[Auth Module] setAuthStrategy: ${name}`);
+
       if (!moduleOptions.strategies[name]) {
         throw new Error(`Strategy "${name}" is not defined!`);
       }
@@ -67,7 +69,7 @@ export default {
     // =========================================================================
 
     loginWith(strategy, options = {}) {
-      return this.setStrategy(strategy).login(options);
+      return this.setAuthStrategy(strategy).login(options);
     },
 
     async login(options = {}) {
@@ -150,17 +152,21 @@ export default {
   },
 
   async created() {
-    // Retrieve last strategy.
+    // Restore last strategy.
     const storedStrategy = storage.getItem('strategy');
     if (storedStrategy) {
-      this.setStrategy(storedStrategy);
+      console.log('[Auth Module] Restore strategy: ' + storedStrategy);
+
+      this.setAuthStrategy(storedStrategy);
     } else {
-      this.setStrategy('client');
+      this.setAuthStrategy('client');
     }
 
-    // Retrieve user data from stored token.
+    // Restore user data.
     const storedToken = storage.getItem('token');
     if (storedToken) {
+      console.log('[Auth Module] Restore user data');
+
       this.authState.token = storedToken;
 
       try {
@@ -171,6 +177,7 @@ export default {
     }
 
     this.authState.loaded = true;
+    console.log('[Auth Module] created');
   },
 };
 
