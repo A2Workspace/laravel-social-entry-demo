@@ -17,7 +17,8 @@ export default {
   overflow: hidden;
   position: relative;
 
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   height: auto;
   margin: 0 auto;
   background: var(--sign-in-box-bg, #fff);

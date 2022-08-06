@@ -12,6 +12,13 @@
         <ClientLoginPage :registerMode="registerMode" ref="clientLogin" />
       </template>
     </transition>
+
+    <footer>
+      <p>Powered by</p>
+      <strong
+        ><a href="https://github.com/A2Workspace/laravel-social-entry">A2Workspace / Laravel-Social-Entry</a></strong
+      >
+    </footer>
   </div>
 </template>
 
@@ -159,5 +166,31 @@ function log(message) {
 .traverse-leave-to {
   opacity: 0;
   transform: translateX(-300px);
+}
+
+footer {
+  display: block;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 2em 0;
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+footer p {
+  margin: 0;
+}
+
+footer strong {
+  font-weight: normal;
+  color: #555;
+}
+
+footer a {
+  color: inherit;
 }
 </style>
