@@ -38,6 +38,7 @@ export default {
 
   provide() {
     const $auth = {
+      setStrategy: this.setStrategy,
       login: this.login,
       loginWith: this.loginWith,
       logout: this.logout,

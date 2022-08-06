@@ -27,6 +27,8 @@ export default {
     ClientLoginPage,
   },
 
+  inject: ['$socialEntry'],
+
   data() {
     return {
       adminMode: false,
@@ -84,6 +86,7 @@ export default {
 
     if (parars.has('admin') && parars.get('admin') !== 'false') {
       this.adminMode = true;
+      this.$socialEntry.setStrategy('admin');
     }
   },
 
