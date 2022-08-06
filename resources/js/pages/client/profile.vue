@@ -70,7 +70,7 @@ export default {
       provider = String(provider).toLowerCase();
       provider = provider.charAt(0).toUpperCase() + provider.substr(1);
 
-      window.alert(`The ${provider} account is connected`);
+      window.alert(`The ${provider} account connected successfully`);
       window.location.replace('/');
     },
 
