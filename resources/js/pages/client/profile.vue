@@ -21,11 +21,10 @@
 </template>
 
 <script>
-import Card from '../../components/profile/Card';
-import CardDescs from '../../components/profile/CardDescs';
-import CardDescsItem from '../../components/profile/CardDescsItem';
-import CardDescsSocialite from '../../components/profile/CardDescsSocialite';
-import { resetParams } from '../../mixins/SocialEntry';
+import Card from '@/components/profile/Card';
+import CardDescs from '@/components/profile/CardDescs';
+import CardDescsItem from '@/components/profile/CardDescsItem';
+import CardDescsSocialite from '@/components/profile/CardDescsSocialite';
 
 export default {
   components: {
@@ -59,7 +58,8 @@ export default {
       if (!response.data.new_user || response.data.local_user_id !== null) {
         window.alert('The social account is already connected to a different user');
 
-        resetParams();
+        // Clear and reset URL params.
+        window.history.replaceState({}, window.document.title, window.location.href.split('?')[0]);
 
         return false;
       }

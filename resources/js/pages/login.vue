@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import PaneSwitch from '../components/PaneSwitch';
-import { resetParams } from '../mixins/SocialEntry';
+import PaneSwitch from '@/components/PaneSwitch';
+import { resetParams } from '@/mixins/SocialEntry';
 import AdminLoginPage from './admin/login';
 import ClientLoginPage from './client/login';
 

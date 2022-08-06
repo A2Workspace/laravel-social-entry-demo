@@ -28,10 +28,9 @@
 
 <script>
 import axios from 'axios';
-import FlipCard from '../../components/login/FlipCard';
-import LoginPane from '../../components/login/LoginPane';
-import RegisterPane from '../../components/login/RegisterPane';
-import { resetParams } from '../../mixins/SocialEntry';
+import FlipCard from '@/components/login/FlipCard';
+import LoginPane from '@/components/login/LoginPane';
+import RegisterPane from '@/components/login/RegisterPane';
 
 export default {
   components: {
@@ -133,6 +132,10 @@ function resolveUsername(email) {
   }
 
   return email.slice(0, email.indexOf('@'));
+}
+
+function resetParams() {
+  window.history.replaceState({}, window.document.title, window.location.href.split('?')[0]);
 }
 </script>
 
