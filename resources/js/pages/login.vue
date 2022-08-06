@@ -1,120 +1,182 @@
 <template>
-  <div class="login-page">
-    <div class="sign-in-box-pos">
-      <SignInBox>
-        <RegisterSection v-if="'sign_on' === status" :options="registerOptions" />
-        <LoginSection v-else />
-      </SignInBox>
+  <div class="login-page-wrap">
+    <div class="pane-switch-pos" :class="{ '--hide': registerMode }">
+      <PaneSwitch inactiveText="Client" activeText="Admin" v-model="inputAdminMode" />
     </div>
+
+    <transition name="traverse">
+      <template v-if="adminMode">
+        <AdminLoginPage />
+      </template>
+      <template v-else>
+        <ClientLoginPage :registerMode="registerMode" ref="clientLogin" />
+      </template>
+    </transition>
+
+    <AppFooter />
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import SignInBox from '../components/login/SignInBox';
-import LoginSection from '../components/login/LoginSection';
-import RegisterSection from '../components/login/RegisterSection';
-import { resetParams } from '../mixins/SocialEntry';
+import PaneSwitch from '@/components/PaneSwitch';
+import AppFooter from '@/components/AppFooter';
+import AdminLoginPage from './admin/login';
+import ClientLoginPage from './client/login';
 
 export default {
   components: {
-    SignInBox,
-    LoginSection,
-    RegisterSection,
+    PaneSwitch,
+    AppFooter,
+    AdminLoginPage,
+    ClientLoginPage,
   },
 
   inject: ['$auth', '$socialEntry'],
 
   data() {
     return {
-      status: 'sign_in',
-      defaultFormData: null,
-      registerOptions: {},
-    };
-  },
-
-  provide() {
-    return {
-      handleLogin: this.handleLogin,
-      handleRegister: this.handleRegister,
-      handleSocialLogin: this.handleSocialLogin,
-      getSocialLoginRedirectUrl: this.getSocialLoginRedirectUrl,
-      toLoginPage: () => (this.status = 'sign_in'),
-      toRegisterPage: () => (this.status = 'sign_on'),
+      adminMode: false,
+      registerMode: false,
     };
   },
 
   methods: {
-    handleLogin(strategy, options) {
-      resetParams();
+    watchRegisterModeValue() {
+      const ref = this.$refs.clientLogin;
 
-      return this.$auth.loginWith(strategy, options);
-    },
-
-    handleRegister(formData) {
-      return axios.post('/api/register', formData);
-    },
-
-    handleSocialLogin(provider) {
-      this.$socialEntry.authorize(provider).redirect();
-    },
-
-    getSocialLoginRedirectUrl(provider) {
-      return this.$socialEntry.authorize(provider).getTargetUrl();
-    },
-
-    async completeSocialLogin() {
-      const response = await this.$socialEntry.completeAuthorization().catch(() => {});
-
-      if (!response) {
-        return false;
+      if (!ref) {
+        return;
       }
 
-      if (response.data.new_user || response.data.local_user_id == null) {
-        this.status = 'sign_on';
-
-        this.registerOptions = {
-          form: {
-            username: resolveUsername(response.data.social_email),
-            nickname: response.data.social_name,
-          },
-          socialProvider: response.data.provider,
-          socialAvatar: response.data.social_avatar,
-          socialIdentifier: response.data.identifier,
-          accessToken: response.data.access_token,
-        };
-
-        return true;
+      if (this._registerModeValueRef && this._registerModeValueRef === ref) {
+        return;
       }
 
-      const authResponse = await this.$socialEntry.loginWithToken(response.data.access_token);
+      this._registerModeValueRef = ref;
 
-      resetParams();
+      if (this._registerModeValueWatcher) {
+        this._registerModeValueWatcher();
+      }
 
-      await this.$auth.setUserToken(authResponse.data.access_token);
+      this._registerModeValueWatcher = this.$watch(
+        () => ref.registerMode,
+        (value) => {
+          this.registerMode = value;
+        }
+      );
     },
   },
 
-  async mounted() {
-    await this.completeSocialLogin();
+  computed: {
+    inputAdminMode: {
+      get() {
+        return this.adminMode;
+      },
+      set(v) {
+        this.adminMode = v;
+
+        if (this.adminMode) {
+          log('[Page: login.vue] Switch to admin user login pane');
+          window.history.replaceState(null, null, '?admin');
+        } else {
+          log('[Page: login.vue] Switch to default login pane');
+          window.history.replaceState(null, null, '?');
+        }
+      },
+    },
+  },
+
+  created() {
+    if (this.$auth.getStrategy() === 'admin') {
+      log('[Page: login.vue] Sync admin mode status');
+
+      this.adminMode = true;
+    }
+
+    const parars = new URLSearchParams(window.location.search);
+    if (parars.has('admin') && parars.get('admin') !== 'false') {
+      log('[Page: login.vue] Restore admin mode');
+
+      this.adminMode = true;
+      this.$auth.setStrategy('admin');
+      this.$socialEntry.setStrategy('admin');
+    } else log('[Page: login.vue] created');
+  },
+
+  mounted() {
+    this.watchRegisterModeValue();
+  },
+
+  updated() {
+    this.watchRegisterModeValue();
   },
 };
 
-function resolveUsername(email) {
-  if (!email) {
-    return '';
-  }
-
-  return email.slice(0, email.indexOf('@'));
+function log(message) {
+  console.log(`%c${message}`, 'background: #d4efdf');
 }
 </script>
 
-<style scoped>
-.login-page {
-  height: 100%;
+<style>
+.login-page-wrap {
+  /* position: relative; */
+  box-sizing: border-box;
 }
 
-.sign-in-box-pos {
-  padding: 15vh 0 0;
+.pane-switch-pos {
+  position: absolute;
+  display: grid;
+  place-content: center;
+  width: 100%;
+  top: 10vh;
+
+  transition-property: opacity, top;
+  transition-duration: 300ms;
+}
+
+.pane-switch-pos.--hide {
+  opacity: 0;
+  top: 5vh;
+}
+
+@media screen and (max-height: 768px) {
+  .pane-switch-pos {
+    top: 30px;
+  }
+
+  .pane-switch-pos.--hide {
+    top: 0;
+  }
+}
+
+.transition-wrapper {
+  position: relative;
+}
+
+.traverse-enter-active,
+.traverse-leave-active {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  transition-property: opacity, transform;
+  transition-duration: 600ms;
+}
+
+.traverse-enter-active {
+  transform: translateX(300px) scale(1.05);
+}
+
+.traverse-enter-to {
+  transform: translateX(0);
+}
+
+.traverse-leave-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.traverse-leave-to {
+  opacity: 0;
+  transform: translateX(-300px);
 }
 </style>

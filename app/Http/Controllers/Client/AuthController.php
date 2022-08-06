@@ -21,7 +21,7 @@ class AuthController extends Controller
      */
     protected function guard(): JWTGuard
     {
-        return Auth::guard('api');
+        return Auth::guard('client');
     }
 
     /**

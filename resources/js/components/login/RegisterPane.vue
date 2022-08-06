@@ -1,13 +1,11 @@
 <template>
-  <div class="sign-in-box__inner">
+  <SignInBox>
     <div class="sign-in-box__top-actions">
-      <a href="#" draggable="false" @click="toLoginPage">
-        <span>Sign In</span>
-      </a>
+      <slot name="actions"></slot>
     </div>
 
     <div class="sign-in-box__contain">
-      <SectionHeader small>Social Entry</SectionHeader>
+      <BoxHeader small>{{ headerText }}</BoxHeader>
 
       <SocialConnectingHeader :service="socialProvider" :userAvatar="socialAvatar" v-show="socialProvider" />
 
@@ -19,7 +17,7 @@
         :class="{ '--shaking': errorMessage }"
         @submit.prevent="handleRegister"
       >
-        <SectionFormItem
+        <BoxFormItem
           type="text"
           :label="socialIdentifierLabel"
           disabled
@@ -27,7 +25,7 @@
           v-if="socialIdentifier"
         />
 
-        <SectionFormItem
+        <BoxFormItem
           type="text"
           label="Username"
           name="username"
@@ -36,7 +34,7 @@
           v-model="form.username"
         />
 
-        <SectionFormItem
+        <BoxFormItem
           type="password"
           label="Password"
           name="password"
@@ -46,7 +44,7 @@
           v-model="form.password"
         />
 
-        <SectionFormItem
+        <BoxFormItem
           type="text"
           label="Nickname"
           name="nickname"
@@ -55,32 +53,35 @@
           v-model="form.nickname"
         />
 
-        <SectionButton :processing="isProcessing">Create Account</SectionButton>
+        <BoxButton :processing="isProcessing">{{ registerButtonText }}</BoxButton>
       </form>
     </div>
-  </div>
+  </SignInBox>
 </template>
 
 <script>
-import SectionButton from './pures/SectionButton';
-import SectionFormItem from './pures/SectionFormItem';
-import SectionHeader from './pures/SectionHeader';
-import SocialConnectingHeader from './pures/SocialConnectingHeader';
+import BoxButton from './BoxButton';
+import BoxFormItem from './BoxFormItem';
+import BoxHeader from './BoxHeader';
+import SignInBox from './SignInBox';
+import SocialConnectingHeader from './SocialConnectingHeader';
 
 export default {
   components: {
-    SectionButton,
-    SectionFormItem,
-    SectionHeader,
+    BoxButton,
+    BoxFormItem,
+    BoxHeader,
+    SignInBox,
     SocialConnectingHeader,
   },
 
-  inject: {
-    doHandleRegister: 'handleRegister',
-    toLoginPage: 'toLoginPage',
-  },
-
   props: {
+    headerText: {
+      default: 'Social Entry',
+    },
+    registerButtonText: {
+      default: 'Create Account',
+    },
     options: {
       type: Object,
       default: () => ({
@@ -91,6 +92,10 @@ export default {
         accessToken: null,
       }),
     },
+  },
+
+  inject: {
+    doHandleRegister: 'handleRegister',
   },
 
   data() {
@@ -203,6 +208,22 @@ export default {
 
       if (provider) {
         return provider.charAt(0).toUpperCase() + provider.substr(1) + ' ID';
+      }
+    },
+  },
+
+  watch: {
+    'options.form'(newestFormData) {
+      if (typeof newestFormData !== 'object') {
+        return;
+      }
+
+      if (this.form.username == '') {
+        this.form.username = newestFormData.username;
+      }
+
+      if (this.form.nickname == '') {
+        this.form.nickname = newestFormData.nickname;
       }
     },
   },

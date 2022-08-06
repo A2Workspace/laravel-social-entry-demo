@@ -1,31 +1,44 @@
 <template>
   <div class="wrapper">
-    <ProfilePage v-if="status === 'logged_in'" />
-    <LoginPage v-if="status === 'default'" />
+    <transition name="fade" mode="out-in" v-if="loaded">
+      <AdminProfilePage v-if="'admin.profile' === status" />
+      <ClientProfilePage v-if="'client.profile' === status" />
+      <MixLoginPage v-if="'login' === status" />
+    </transition>
   </div>
 </template>
 
 <script>
 import Auth from './mixins/Auth';
 import SocialEntry from './mixins/SocialEntry';
-import LoginPage from './pages/login';
-import ProfilePage from './pages/profile';
+import MixLoginPage from './pages/login';
+import AdminProfilePage from './pages/admin/profile';
+import ClientProfilePage from './pages/client/profile';
 
 export default {
+  components: {
+    MixLoginPage,
+    AdminProfilePage,
+    ClientProfilePage,
+  },
+
   mixins: [Auth, SocialEntry],
-  components: { LoginPage, ProfilePage },
 
   computed: {
+    loaded() {
+      return this.authState.loaded;
+    },
+
     status() {
-      if (! this.authState.loaded) {
-        return 'processing';
-      }
-
       if (this.loggedIn) {
-        return 'logged_in';
+        if (this.authState.strategy === 'admin') {
+          return 'admin.profile';
+        } else {
+          return 'client.profile';
+        }
       }
 
-      return 'default';
+      return 'login';
     },
   },
 };
@@ -35,7 +48,7 @@ export default {
 html,
 body {
   height: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   margin: 0;
   background-color: #eceef3;
 }
@@ -43,6 +56,30 @@ body {
 .wrapper {
   position: relative;
   height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 600ms;
+}
+
+.fade-enter-active {
+  opacity: 0;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+
+.fade-leave-active {
+  opacity: 1;
+}
+
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
 

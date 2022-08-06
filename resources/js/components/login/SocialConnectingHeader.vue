@@ -200,7 +200,7 @@ export default {
   left: -2px;
   right: -2px;
   bottom: -2px;
-  z-index: 1;
+  z-index: 100;
   border-radius: 50%;
 
   border: 3px solid #85929e;

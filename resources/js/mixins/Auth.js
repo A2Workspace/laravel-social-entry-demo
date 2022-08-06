@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const storage = window.sessionStorage;
+
 const moduleOptions = {
   strategies: {
-    user: {
+    client: {
       url: '/auth',
     },
     admin: {
@@ -18,7 +20,8 @@ export default {
         loaded: false,
         user: null,
         token: null,
-        strategy: moduleOptions.strategies['user'],
+        strategy: 'client',
+        options: {},
       },
     };
   },
@@ -35,6 +38,8 @@ export default {
 
   provide() {
     const $auth = {
+      setStrategy: this.setAuthStrategy,
+      getStrategy: () => this.authState.strategy,
       login: this.login,
       loginWith: this.loginWith,
       logout: this.logout,
@@ -47,8 +52,15 @@ export default {
   },
 
   methods: {
-    setStrategy(name) {
-      this.authState.strategy = moduleOptions.strategies[name];
+    setAuthStrategy(name) {
+      log(`[Auth Module] setAuthStrategy: ${name}`);
+
+      if (!moduleOptions.strategies[name]) {
+        throw new Error(`Strategy "${name}" is not defined!`);
+      }
+
+      this.authState.strategy = name;
+      this.authState.options = moduleOptions.strategies[name];
 
       return this;
     },
@@ -58,7 +70,7 @@ export default {
     // =========================================================================
 
     loginWith(strategy, options = {}) {
-      return this.setStrategy(strategy).login(options);
+      return this.setAuthStrategy(strategy).login(options);
     },
 
     async login(options = {}) {
@@ -68,7 +80,7 @@ export default {
 
       options = {
         data: {},
-        ...this.authState.strategy,
+        ...this.authState.options,
         ...options,
       };
 
@@ -87,8 +99,10 @@ export default {
       this.authState.user = null;
       this.authState.token = null;
 
+      storage.removeItem('token');
+      storage.removeItem('strategy');
+
       axios.defaults.headers.common['Authorization'] = null;
-      window.sessionStorage.removeItem('token');
 
       return Promise.resolve(true);
     },
@@ -100,7 +114,7 @@ export default {
     async fetchUser(options = {}) {
       options = {
         token: this.authState.token,
-        ...this.authState.strategy,
+        ...this.authState.options,
         ...options,
       };
 
@@ -122,6 +136,7 @@ export default {
       }
 
       this.authState.user = userData;
+      storage.setItem('strategy', this.authState.strategy);
       axios.defaults.headers.common['Authorization'] = response.config.headers['Authorization'];
 
       return response;
@@ -133,30 +148,50 @@ export default {
       }
 
       this.authState.token = token;
-      window.sessionStorage.setItem('token', token);
+      storage.setItem('token', token);
 
       return await this.fetchUser();
     },
   },
 
   async created() {
-    const token = window.sessionStorage.getItem('token');
+    // Restore last strategy.
+    const storedStrategy = storage.getItem('strategy');
+    if (storedStrategy) {
+      log(`[Auth Module] Restore strategy from sessionStorage: ${storedStrategy}`);
 
-    // Retrieve the user data from stored token.
-    if (token) {
-      this.authState.token = token;
+      this.setAuthStrategy(storedStrategy);
+    } else {
+      this.setAuthStrategy('client');
+    }
+
+    // Restore user data.
+    const storedToken = storage.getItem('token');
+    if (storedToken) {
+      log('[Auth Module] Restore token from sessionStorage');
+
+      this.authState.token = storedToken;
 
       try {
         await this.fetchUser();
       } catch (error) {
-        window.sessionStorage.removeItem('token');
+        storage.removeItem('token');
       }
     }
 
     this.authState.loaded = true;
+    log('[Auth Module] created');
   },
 };
 
+// =============================================================================
+// = Helpers
+// =============================================================================
+
 function isAccessibility(value) {
   return typeof value === 'object' && value !== null;
+}
+
+function log(message) {
+  console.log(`%c${message}`, 'background: #d6eaf8');
 }

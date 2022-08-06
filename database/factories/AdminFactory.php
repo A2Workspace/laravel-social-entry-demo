@@ -24,7 +24,7 @@ class AdminFactory extends Factory
         return [
             'username' => $this->faker->numerify('admin00####'),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'display_name' => $this->faker->name(),
+            'display_name' => $this->faker->userName(),
             'is_enabled' => true,
         ];
     }

@@ -21,11 +21,10 @@
 </template>
 
 <script>
-import Card from '../components/profile/Card';
-import CardDescs from '../components/profile/CardDescs';
-import CardDescsItem from '../components/profile/CardDescsItem';
-import CardDescsSocialite from '../components/profile/CardDescsSocialite';
-import { resetParams } from '../mixins/SocialEntry';
+import Card from '@/components/profile/Card';
+import CardDescs from '@/components/profile/CardDescs';
+import CardDescsItem from '@/components/profile/CardDescsItem';
+import CardDescsSocialite from '@/components/profile/CardDescsSocialite';
 
 export default {
   components: {
@@ -59,7 +58,8 @@ export default {
       if (!response.data.new_user || response.data.local_user_id !== null) {
         window.alert('The social account is already connected to a different user');
 
-        resetParams();
+        // Clear and reset URL params.
+        window.history.replaceState({}, window.document.title, window.location.href.split('?')[0]);
 
         return false;
       }
@@ -70,7 +70,7 @@ export default {
       provider = String(provider).toLowerCase();
       provider = provider.charAt(0).toUpperCase() + provider.substr(1);
 
-      window.alert(`The ${provider} account is connected`);
+      window.alert(`The ${provider} account connected successfully`);
       window.location.replace('/');
     },
 
@@ -82,8 +82,6 @@ export default {
 
     async handleLogout() {
       this.$auth.logout();
-
-      window.location.replace('/');
     },
   },
 
@@ -99,10 +97,19 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .profile-page {
   box-sizing: border-box;
   padding-top: 110px;
   height: 100%;
+}
+
+@media screen and (max-height: 768px) {
+  .profile-page {
+    padding-top: auto;
+
+    display: grid;
+    place-content: center;
+  }
 }
 </style>

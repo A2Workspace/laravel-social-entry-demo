@@ -1,6 +1,6 @@
 <template>
-  <div class="section-header" :class="className">
-    <h2 class="section-header__text">
+  <div class="box-header" :class="className">
+    <h2 class="box-header__text">
       <a :href="homePage" draggable="false">
         <slot>{{ text }}</slot>
       </a>
@@ -40,16 +40,16 @@ export default {
 </script>
 
 <style scoped>
-.section-header {
+.box-header {
   margin-bottom: 42px;
   user-select: none;
 }
 
-.section-header.--small .section-header__text {
+.box-header.--small .box-header__text {
   font-size: 1.3em;
 }
 
-.section-header__text {
+.box-header__text {
   margin: 0;
   padding: 0;
 
@@ -59,12 +59,12 @@ export default {
   text-align: center;
 }
 
-.section-header__text a {
+.box-header__text a {
   color: inherit;
   text-decoration: none;
 }
 
-.section-header__text a:hover {
+.box-header__text a:hover {
   opacity: 0.82;
 }
 </style>

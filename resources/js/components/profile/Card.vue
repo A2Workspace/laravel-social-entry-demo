@@ -31,7 +31,7 @@ export default {
   max-width: 600px;
   min-width: 300px;
   margin: 0 auto;
-  background: #fff;
+  background: var(--card-bg, #fff);
   border: 1px solid #efefef;
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
@@ -54,9 +54,11 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 100;
+  z-index: 400;
 
-  padding: 10px 10px 0;
+  margin: 5px 6px 0;
+  padding: 5px 4px 0;
+  background: var(--card-bg, #fff);
 
   color: #555;
   font-size: 14px;

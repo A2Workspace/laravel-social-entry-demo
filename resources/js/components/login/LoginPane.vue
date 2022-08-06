@@ -1,20 +1,16 @@
 <template>
-  <div class="sign-in-box__inner">
+  <SignInBox>
     <div class="sign-in-box__top-actions">
-      <span></span>
-      <a href="#" draggable="false" @click="toRegisterPage">
-        <span>Register</span>
-        <i class="fas fa-external-link" />
-      </a>
+      <slot name="actions"></slot>
     </div>
 
     <div class="sign-in-box__contain">
-      <SectionHeader>Social Entry</SectionHeader>
+      <BoxHeader>{{ headerText }}</BoxHeader>
 
       <p class="sign-in-box__error-message" v-show="errorMessage">{{ errorMessage }}</p>
 
       <form class="sign-in-box__form" ref="form" :class="{ '--shaking': errorMessage }" @submit.prevent="handleLogin">
-        <SectionFormItem
+        <BoxFormItem
           type="text"
           label="Username"
           name="username"
@@ -22,7 +18,7 @@
           v-model="form.username"
         />
 
-        <SectionFormItem
+        <BoxFormItem
           type="password"
           label="Password"
           name="password"
@@ -31,7 +27,7 @@
           v-model="form.password"
         />
 
-        <SectionButton :processing="isProcessing">Sign In</SectionButton>
+        <BoxButton :processing="isProcessing">{{ loginButtonText }}</BoxButton>
       </form>
     </div>
 
@@ -46,26 +42,36 @@
         </div>
       </div>
     </div>
-  </div>
+  </SignInBox>
 </template>
 
 <script>
-import SectionButton from './pures/SectionButton';
-import SectionFormItem from './pures/SectionFormItem';
-import SectionHeader from './pures/SectionHeader';
-import SocialEntry from './pures/SocialEntry';
+import BoxButton from './BoxButton';
+import BoxFormItem from './BoxFormItem';
+import BoxHeader from './BoxHeader';
+import SignInBox from './SignInBox';
+import SocialEntry from './SocialEntry';
 
 export default {
   components: {
-    SectionButton,
-    SectionFormItem,
-    SectionHeader,
+    BoxButton,
+    BoxFormItem,
+    BoxHeader,
+    SignInBox,
     SocialEntry,
+  },
+
+  props: {
+    headerText: {
+      default: 'Social Entry',
+    },
+    loginButtonText: {
+      default: 'Sign In',
+    },
   },
 
   inject: {
     doHandleLogin: 'handleLogin',
-    toRegisterPage: 'toRegisterPage',
   },
 
   data() {
@@ -97,7 +103,7 @@ export default {
       const { username, password } = this.form;
       const certificate = { username, password };
 
-      this.processing = this.doHandleLogin('user', certificate)
+      this.processing = this.doHandleLogin(certificate)
         // Handling error message.
         .catch((error) => {
           if (!error.isAxiosError) {

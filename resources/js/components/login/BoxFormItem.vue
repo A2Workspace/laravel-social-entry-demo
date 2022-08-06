@@ -1,10 +1,10 @@
 <template>
-  <div class="section-form-item">
-    <div class="section-form-item__inner">
-      <input class="section-form-item__input" v-bind="$attrs" v-model="inputValue" placeholder=" " :id="inputId" />
-      <label class="section-form-item__label" :for="inputId">{{ label }}</label>
+  <div class="box-form-item">
+    <div class="box-form-item__inner">
+      <input class="box-form-item__input" v-bind="$attrs" v-model="inputValue" placeholder=" " :id="inputId" />
+      <label class="box-form-item__label" :for="inputId">{{ label }}</label>
     </div>
-    <p class="section-form-item__error-message" v-show="parsedErrorMessage">{{ parsedErrorMessage }}</p>
+    <p class="box-form-item__error-message" v-show="parsedErrorMessage">{{ parsedErrorMessage }}</p>
   </div>
 </template>
 
@@ -67,17 +67,17 @@ function makeInputId() {
 </script>
 
 <style scoped>
-.section-form-item {
+.box-form-item {
   display: block;
   margin: 20px 0;
   font-size: 14px;
 }
 
-.section-form-item__inner {
+.box-form-item__inner {
   position: relative;
 }
 
-.section-form-item__label {
+.box-form-item__label {
   position: absolute;
   top: 10px;
   left: 8px;
@@ -92,15 +92,15 @@ function makeInputId() {
   transition: 150ms ease-in;
 }
 
-.section-form-item__input:focus + .section-form-item__label,
-.section-form-item__input:not(:placeholder-shown).section-form-item__input:not(:focus) + .section-form-item__label {
+.box-form-item__input:focus + .box-form-item__label,
+.box-form-item__input:not(:placeholder-shown).box-form-item__input:not(:focus) + .box-form-item__label {
   top: -11px;
   left: 7px;
   font-size: 0.85em;
   background-color: var(--sign-in-box-bg-color, #fff);
 }
 
-.section-form-item__input {
+.box-form-item__input {
   box-sizing: border-box;
 
   width: 100%;
@@ -113,16 +113,16 @@ function makeInputId() {
   outline: 0;
 }
 
-.section-form-item__input:focus {
+.box-form-item__input:focus {
   border: 1px solid #7984a0;
 }
 
-.section-form-item__input:disabled {
+.box-form-item__input:disabled {
   color: #aaa;
   cursor: not-allowed;
 }
 
-.section-form-item__error-message {
+.box-form-item__error-message {
   margin: 0;
   margin-top: 0.7em;
   padding-left: 1px;
