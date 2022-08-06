@@ -13,23 +13,20 @@
       </template>
     </transition>
 
-    <footer>
-      <p>Powered by</p>
-      <strong
-        ><a href="https://github.com/A2Workspace/laravel-social-entry">A2Workspace / Laravel-Social-Entry</a></strong
-      >
-    </footer>
+    <AppFooter />
   </div>
 </template>
 
 <script>
 import PaneSwitch from '@/components/PaneSwitch';
+import AppFooter from '@/components/AppFooter';
 import AdminLoginPage from './admin/login';
 import ClientLoginPage from './client/login';
 
 export default {
   components: {
     PaneSwitch,
+    AppFooter,
     AdminLoginPage,
     ClientLoginPage,
   },
@@ -137,6 +134,16 @@ function log(message) {
   top: 5vh;
 }
 
+@media screen and (max-height: 768px) {
+  .pane-switch-pos {
+    top: 30px;
+  }
+
+  .pane-switch-pos.--hide {
+    top: 0;
+  }
+}
+
 .transition-wrapper {
   position: relative;
 }
@@ -166,31 +173,5 @@ function log(message) {
 .traverse-leave-to {
   opacity: 0;
   transform: translateX(-300px);
-}
-
-footer {
-  display: block;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 2em 0;
-  color: #888;
-  font-size: 14px;
-  text-align: center;
-  line-height: 1.4;
-}
-
-footer p {
-  margin: 0;
-}
-
-footer strong {
-  font-weight: normal;
-  color: #555;
-}
-
-footer a {
-  color: inherit;
 }
 </style>

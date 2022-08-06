@@ -105,4 +105,13 @@ export default {
   padding-top: 110px;
   height: 100%;
 }
+
+@media screen and (max-height: 768px) {
+  .profile-page {
+    padding-top: auto;
+
+    display: grid;
+    place-content: center;
+  }
+}
 </style>

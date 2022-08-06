@@ -93,6 +93,11 @@ export default {
   position: relative;
   width: 100%;
   height: auto;
+}
+
+.flip-card__front,
+.flip-card__back {
+  backface-visibility: hidden;
   transform-style: preserve-3d;
   transition-property: transform;
   transition-delay: 20ms;
@@ -100,18 +105,13 @@ export default {
   transition-timing-function: cubic-bezier(0.5, 1.2, 0.5, 1.2);
 }
 
-.flip-card.--flip {
-  transform: rotateY(-180deg);
-}
-
-.flip-card__front,
-.flip-card__back {
-  backface-visibility: hidden;
-}
-
 .flip-card__front {
   width: 100%;
   height: auto;
+}
+
+.flip-card.--flip .flip-card__front {
+  transform: rotateY(-180deg);
 }
 
 .flip-card__back {
@@ -122,5 +122,9 @@ export default {
   width: 100%;
   height: auto;
   transform: rotateY(180deg);
+}
+
+.flip-card.--flip .flip-card__back {
+  transform: rotateY(0deg);
 }
 </style>

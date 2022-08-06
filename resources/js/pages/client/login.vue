@@ -153,4 +153,10 @@ export function log(message) {
 .login-page {
   padding-top: 18.5vh;
 }
+
+@media screen and (max-height: 768px) {
+  .login-page {
+    padding-top: 90px;
+  }
+}
 </style>
