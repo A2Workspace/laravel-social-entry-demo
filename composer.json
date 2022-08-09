@@ -19,6 +19,8 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "mockery/mockery": "^1.4.4",
+        "phpunit/phpunit": "^9.5.10",
         "protoqol/prequel": "^1.23"
     },
     "autoload": {
@@ -26,6 +28,11 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -41,6 +48,12 @@
         ],
         "post-create-project-cmd": [
             "@php artisan setup"
+        ],
+        "test": [
+            "vendor/bin/phpunit"
+        ],
+        "test-coverage": [
+            "vendor/bin/phpunit --coverage-html coverage"
         ]
     },
     "extra": {
