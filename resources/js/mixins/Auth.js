@@ -5,10 +5,10 @@ const storage = window.sessionStorage;
 const moduleOptions = {
   strategies: {
     client: {
-      url: '/auth',
+      url: '/api/auth',
     },
     admin: {
-      url: '/admin/auth',
+      url: '/admin/api/auth',
     },
   },
 };

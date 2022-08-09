@@ -4,10 +4,10 @@ const moduleOptions = {
   authorization: '/auth/socialite',
   strategies: {
     client: {
-      url: '/auth/socialite',
+      url: '/api/auth/socialite',
     },
     admin: {
-      url: '/admin/auth/socialite',
+      url: '/admin/api/auth/socialite',
     },
   },
 };

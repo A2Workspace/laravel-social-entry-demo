@@ -6,31 +6,56 @@ use A2Workspace\SocialEntry\SocialEntry;
 
 /*
 |--------------------------------------------------------------------------
+| SocialEntry Authorization Routes
+|--------------------------------------------------------------------------
+|
+| Includes:
+| - GET: /auth/socialite
+| - GET: /auth/socialite/{provider}/callback
+|
+*/
+
+SocialEntry::routes(function ($registrar) {
+    $registrar->forAuthorization();
+});
+
+/*
+|--------------------------------------------------------------------------
 | User Auth Routes
 |--------------------------------------------------------------------------
 |
 | Here define the routes used for authentication / authorization client user.
 |
 | Includes:
-| - POST: /auth/login
-| - POST: /auth/logout
-| - POST: /auth/refresh
-| - GET: /auth/user
-| - POST: /auth/socialite/token
-| - POST: /auth/socialite/login
-| - POST: /auth/socialite/connect
-| - POST: /auth/socialite/disconnect
+| - POST: /api/auth/login
+| - POST: /api/auth/logout
+| - POST: /api/auth/refresh
+| - GET: /api/auth/user
+|
+| - POST: /api/auth/socialite/token
+| - POST: /api/auth/socialite/login
+| - POST: /api/auth/socialite/connect
+| - POST: /api/auth/socialite/disconnect
 |
 */
 
 LaravelJwt::routes([
-    'prefix' => '/auth',
-    'middleware' => 'assign.guard:client',
+    'prefix' => '/api/auth',
+    'middleware' => ['api', 'assign.guard:client'],
     'namespace' => '\App\Http\Controllers\Client',
     'as' => 'auth.',
 ]);
 
-SocialEntry::routes();
+SocialEntry::routes(function ($registrar) {
+    $options = [
+        'prefix' => '/api/auth/socialite',
+        'middleware' => ['api', 'assign.guard:client'],
+        'as' => 'auth.social-entry.',
+    ];
+
+    $registrar->forAccessToken($options);
+    $registrar->forUserAccesses($options);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -40,28 +65,32 @@ SocialEntry::routes();
 | Here define the routes used for authentication / authorization admin user.
 |
 | Includes:
-| - POST: /admin/auth/login
-| - POST: /admin/auth/logout
-| - POST: /admin/auth/refresh
-| - GET: /admin/auth/user
-| - POST: /admin/auth/socialite/token
-| - POST: /admin/auth/socialite/login
-| - POST: /admin/auth/socialite/connect
-| - POST: /admin/auth/socialite/disconnect
+| - POST: /admin/api/auth/login
+| - POST: /admin/api/auth/logout
+| - POST: /admin/api/auth/refresh
+| - GET: /admin/api/auth/user
+|
+| - POST: /admin/api/auth/socialite/token
+| - POST: /admin/api/auth/socialite/login
+| - POST: /admin/api/auth/socialite/connect
+| - POST: /admin/api/auth/socialite/disconnect
 |
 */
 
 LaravelJwt::routes([
-    'prefix' => '/admin/auth',
-    'middleware' => 'assign.guard:admin',
+    'prefix' => '/admin/api/auth',
+    'middleware' => ['api', 'assign.guard:admin'],
     'namespace' => '\App\Http\Controllers\Admin',
     'as' => 'admin.auth.',
 ]);
 
 SocialEntry::routes(function ($registrar) {
-    $registrar->all([
-        'middleware' => 'assign.guard:admin',
-        'prefix' => '/admin/auth/socialite',
-        'as' => 'admin.social-entry.',
-    ]);
+    $options = [
+        'prefix' => '/admin/api/auth/socialite',
+        'middleware' => ['api', 'assign.guard:admin'],
+        'as' => 'admin.auth.social-entry.',
+    ];
+
+    $registrar->forAccessToken($options);
+    $registrar->forUserAccesses($options);
 });
